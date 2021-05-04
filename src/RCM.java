@@ -3,6 +3,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+/*
+ * TODO : Builder or Prototype Pattern
+ */
+
 public class RCM {
     private int rcmId;
     private String rcmName;
@@ -106,6 +110,8 @@ public class RCM {
         this.insertedItems=insertedItems;
     }
 
+/****
+ * TODO : Builder or Prototype Pattern
 
-
+****/
 }
