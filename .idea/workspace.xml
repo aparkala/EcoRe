@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="Create, View, Modify GUI">
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EcoRe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EcoRe.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBConn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBConn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Item.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Login.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Menu.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMMain.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.java" afterDir="false" />
-    </list>
+    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="RCM and Stats module added" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -130,7 +116,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620889338693</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="RCM and Stats module added">
+      <created>1622225532777</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1622225532777</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -148,7 +141,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="implemented basic RMOS" />
     <MESSAGE value="Create, View, Modify GUI" />
-    <option name="LAST_COMMIT_MESSAGE" value="Create, View, Modify GUI" />
+    <MESSAGE value="RCM and Stats module added" />
+    <option name="LAST_COMMIT_MESSAGE" value="RCM and Stats module added" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
