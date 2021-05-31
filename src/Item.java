@@ -1,7 +1,22 @@
 public class Item {
     private String itemName;
-    private double pricePerLb;
+    private int itemID;
+    private double pricePerMetric;
 
+    public Item(int itemID,String itemName,double pricePerMetric)
+    {
+        this.itemID=itemID;
+        this.itemName=itemName;
+        this.pricePerMetric=pricePerMetric;
+    }
+    public  int getItemID()
+    {
+        return this.itemID;
+    }
+    public void setItemID(int ItemID)
+    {
+        this.itemID=itemID;
+    }
     public String getItemName()
     {
         return this.itemName;
@@ -10,12 +25,12 @@ public class Item {
     {
         this.itemName=itemName;
     }
-    public double getPricePerLb()
+    public double getPricePerMetric()
     {
-        return this.getPricePerLb();
+        return this.pricePerMetric;
     }
-    public void setPricePerLb(double pricePerLb)
+    public void setPricePerMetric(double pricePerMetric)
     {
-        this.pricePerLb=pricePerLb;
+        this.pricePerMetric=pricePerMetric;
     }
 }
