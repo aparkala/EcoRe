@@ -23,8 +23,11 @@ public class RCMMain extends FocusAdapter {
     private JScrollPane rcmScrollPane;
     private JScrollPane itemsScrollPane;
     private JTable tableInserted;
-    private JPanel lblAcceptedItems;
+    private JPanel lblAcceptedItemsPane;
     private JLabel lblInsertedItems;
+    private JLabel lblImage;
+    private JLabel lblAcceptedItems;
+    private JPanel errorPanel;
     private String rcmId;
     private String groupID;
     private String metric;
@@ -59,9 +62,12 @@ public class RCMMain extends FocusAdapter {
     {
         JFrame frame = new JFrame();
         frame.setContentPane(panelRCM);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(100, 100, 1200, 725);
+        frame.setLocationRelativeTo(null);
 
+        ImageIcon icon = new ImageIcon("Images/ecore.png");
+        lblImage.setIcon(icon);
 
         txtItem.addFocusListener(new FocusAdapter() {
             @Override
@@ -154,8 +160,18 @@ public class RCMMain extends FocusAdapter {
         submitButton.setForeground(Color.black);
         submitButton.setBounds(420, 365, 350, 90);
 
+        lblAcceptedItems.setForeground(Color.white);
+        lblAcceptedItems.setFont(new Font("Montserrat", Font.PLAIN, 30));
+
+        lblInsertedItems.setForeground(Color.white);
+        lblInsertedItems.setFont(new Font("Montserrat", Font.PLAIN, 30));
+
+        lblError.setForeground(Color.white);
+        lblError.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
         buttonInsert.addActionListener(evt -> InsertRCMItems(evt));
         submitButton.addActionListener(evt -> SubmitItems(evt));
+
 
         frame.setVisible(true);
     }
@@ -280,10 +296,14 @@ public class RCMMain extends FocusAdapter {
         rcmTransactions.stream().forEach(e->e.setCash(cashCoupon));
         DBConn.instance().InsertRCMItems(rcmTransactions);
         DBConn.instance().UpdateCapacityMoney(capacityLeft,moneyLeft,rcmId);
+
+
+    }
+
     }
 
 
 
-}
+
 
 

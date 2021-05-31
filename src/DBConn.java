@@ -34,7 +34,8 @@ public class DBConn {
             return status;
         }
     }
-    boolean InsertRCM(String rcmId,String groupId,double rcmCapacity,double money,String rcmLocation) {
+    //boolean InsertRCM(String rcmId,String groupId,double rcmCapacity,double money,String rcmLocation) {
+    boolean InsertRCM(RCMCreate rcmCreate) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -43,14 +44,13 @@ public class DBConn {
             Statement stmt=conn.createStatement();
             String query = "INSERT INTO RCM_(rcmId,groupId,rcmLocation,rcmCapacity,capacityLeft,money,opStatus) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,rcmId);
-            ps.setString(2,groupId);
-            ps.setString(3,rcmLocation);
-            ps.setDouble(4,rcmCapacity);
-            ps.setDouble(5,rcmCapacity);
-            ps.setDouble(6,money);
-
-            ps.setString(7,"inactive");
+            ps.setString(1,rcmCreate.getGroupId());
+            ps.setString(2,rcmCreate.getRcmId());
+            ps.setString(3,rcmCreate.getLocation());
+            ps.setDouble(4,rcmCreate.getCapacity());
+            ps.setDouble(5,rcmCreate.getCapacityLeft());
+            ps.setDouble(6,rcmCreate.getMoney());
+            ps.setString(7,rcmCreate.getOpStatus());
 
             status=ps.execute();
             conn.close();
@@ -300,7 +300,7 @@ public class DBConn {
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
             Statement stmt=conn.createStatement();
 
-            String query = "SELECT a.rcmId,RCM_.rcmLocation FROM (SELECT rcmId,transactionid,COUNT(rcmId) rcmCount FROM Transactions_ where insertedDate > trunc(sysdate-?) GROUP BY rcmId,transactionid ORDER BY transactionid DESC ) a inner join RCM_ on a.rcmId=RCM_.rcmId WHERE  ROWNUM <= 1";
+            String query = "SELECT a.rcmId,RCM_.rcmLocation FROM (SELECT rcmId,inserteddate,COUNT(rcmId) rcmCount FROM Transactions_ where insertedDate > trunc(sysdate-?) GROUP BY insertedDate,rcmId ORDER BY insertedDate,rcmCount DESC ) a inner join RCM_ on a.rcmId=RCM_.rcmId WHERE  ROWNUM <= 1";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, days);
             result=ps.executeQuery();

@@ -38,9 +38,8 @@ public class Menu{
 
         JFrame frame = new JFrame("ECORE");
         frame.setContentPane(panel1);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(100, 100, 700, 400);
+        frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
 
         comboBoxRCM.setFont(new Font("Montserrat", Font.PLAIN, 15));

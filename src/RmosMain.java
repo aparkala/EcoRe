@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,16 +10,20 @@ import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import java.util.List;
 import java.util.Map;
 
 public class RmosMain extends ApplicationFrame{
@@ -48,9 +54,7 @@ public class RmosMain extends ApplicationFrame{
     private JTextField txtNoOfDays;
     private JButton buttonFrequentlyUsed;
     private JLabel lblFrequentlyUsed;
-    private JTabbedPane tabbedPane1;
     private JPanel visualPane;
-    private JPanel textPane;
     private JComboBox groupComboBox;
     private JTextField txtFromDate;
     private JTextField txtToDate;
@@ -63,43 +67,236 @@ public class RmosMain extends ApplicationFrame{
     private JPanel Vpane;
     private JPanel Visual;
     private JLabel lblError;
+    private JLabel lblImage;
+    private JLabel lblGroup;
+    private JLabel lblRCM;
+    private JPanel ErrorPanel;
+    private JLabel lblNoOfItemsHeader;
+    private JLabel lblMostUsedHeader;
+    private JLabel lblNoOfDays;
+    private JTabbedPane statsTabbedPane;
+    private JPanel visualPanel;
+    private JScrollPane textScrollPane;
+    private JLabel lblStatsHeader;
+    private JLabel lblGroupId;
+    private JLabel lblGroupName;
+    private JLabel lblRCMId;
+    private JLabel lblCapacity;
+    private JLabel lblMoney;
+    private JLabel lblLocation;
+    private JLabel lblFrom;
+    private JLabel lblTo;
+    private JLabel lblCategory;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
     private String[] RCMVALUE = {"RCM","VALUE"};
     private String[] RCMEMPTY = {"RCM","EMPTY"};
 
+
     public RmosMain() {
         super( "applicationTitle" );
+
+
         initComponents();
     }
     public void initComponents()
     {
+
+
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(100, 100, 700, 400);
+       // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
+
+        ImageIcon icon = new ImageIcon("Images/ecore.png");
+        lblImage.setIcon(icon);
+
+        CVMS.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        statsPane.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        ItemsPane.setFont(new Font("Montserrat", Font.PLAIN, 15));
+
+        lblGroup.setForeground(Color.white);
+        lblGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblGroupId.setForeground(Color.black);
+        lblGroupId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblGroupName.setForeground(Color.black);
+        lblGroupName.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblRCMId.setForeground(Color.black);
+        lblRCMId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblCapacity.setForeground(Color.black);
+        lblCapacity.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblMoney.setForeground(Color.black);
+        lblMoney.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblLocation.setForeground(Color.black);
+        lblLocation.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblGroup.setForeground(Color.white);
+        lblGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblRCM.setForeground(Color.white);
+        lblRCM.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblNoOfItemsHeader.setForeground(Color.white);
+        lblNoOfItemsHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblMostUsedHeader.setForeground(Color.white);
+        lblMostUsedHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblStatsHeader.setForeground(Color.white);
+        lblStatsHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblNoOfDays.setFont(new Font("Montserrat", Font.PLAIN, 15));
+
+        lblError.setForeground(Color.white);
+        lblError.setFont(new Font("Montserrat", Font.PLAIN, 25));
+
+        lblMessage.setForeground(Color.white);
+        lblMessage.setFont(new Font("Montserrat", Font.PLAIN, 25));
+
+        lblFrequentlyUsed.setForeground(Color.white);
+        lblFrequentlyUsed.setFont(new Font("Montserrat", Font.PLAIN, 25));
+
         txtGroupID.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        txtGroupID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        txtGroupID.setBackground(Color.white);
+        txtGroupID.setForeground(Color.black);
+        txtGroupID.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+        //txtGroupID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         txtGroupName.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        txtGroupName.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        //txtGroupName.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        txtGroupName.setBackground(Color.white);
+        txtGroupName.setForeground(Color.black);
+        txtGroupName.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         groupIds.setFont(new Font("Montserrat", Font.PLAIN, 15));
         groupIds.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
 
         rcmId.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        rcmId.setBackground(Color.white);
+        rcmId.setForeground(Color.black);
+        rcmId.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+       // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         rcmCapacity.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        rcmCapacity.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Capacity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        rcmCapacity.setBackground(Color.white);
+        rcmCapacity.setForeground(Color.black);
+        rcmCapacity.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+        //rcmCapacity.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Capacity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         money.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        money.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Money", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        money.setBackground(Color.white);
+        money.setForeground(Color.black);
+        money.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+        //money.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Money", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
 
         rcmLocation.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        rcmLocation.setBackground(Color.white);
+        rcmLocation.setForeground(Color.black);
+        rcmLocation.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+       //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+        comboBoxGroup.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        comboBoxGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        comboBoxGroup.setModel(new DefaultComboBoxModel());
+
+        comboBoxRCM.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        comboBoxRCM.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "RCM", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+        comboBoxMonth.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        comboBoxMonth.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+
+        comboBoxYear.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        comboBoxYear.setBorder(BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+
+        groupComboBox.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        groupComboBox.setBorder(BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+        RCMComboBox.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        RCMComboBox.setBorder(BorderFactory.createTitledBorder(null, "RCM", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+
+        lblCategory.setForeground(Color.black);
+        lblCategory.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        weightRadioButton.setForeground(Color.black);
+        weightRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        valueRadioButton.setForeground(Color.black);
+        valueRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        emptyTimesRadioButton.setForeground(Color.black);
+        emptyTimesRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblFrom.setForeground(Color.black);
+        lblFrom.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblTo.setForeground(Color.black);
+        lblTo.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        txtFromDate.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        txtFromDate.setBackground(Color.white);
+        txtFromDate.setForeground(Color.black);
+        txtFromDate.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        txtToDate.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        txtToDate.setBackground(Color.white);
+        txtToDate.setForeground(Color.black);
+        txtToDate.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+
+        txtNoOfDays.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        txtNoOfDays.setBackground(Color.white);
+        txtNoOfDays.setForeground(Color.black);
+        txtNoOfDays.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        submitGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        submitGroup.setForeground(Color.black);
+        submitGroup.setBounds(420, 365, 350, 90);
+
+        rcmSubmit.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        rcmSubmit.setForeground(Color.black);
+        rcmSubmit.setBounds(420, 365, 350, 90);
+
+        buttonSubmit.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        buttonSubmit.setForeground(Color.black);
+        buttonSubmit.setBounds(420, 365, 350, 90);
+
+        buttonFrequentlyUsed.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        buttonFrequentlyUsed.setForeground(Color.black);
+        buttonFrequentlyUsed.setBounds(420, 365, 350, 90);
+
+
+        buttonWeightValue.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        buttonWeightValue.setForeground(Color.black);
+        buttonWeightValue.setBounds(420, 365, 350, 90);
 
         weightRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -160,17 +357,21 @@ public class RmosMain extends ApplicationFrame{
         group.add(weightRadioButton);
         group.add(valueRadioButton);
         group.add(emptyTimesRadioButton);
+
         weightRadioButton.setSelected(true);
+
 
 
 
 
         submitGroup.addActionListener(evt -> SubmitGroup(evt));
         rcmSubmit.addActionListener(evt -> SubmitRCM(evt));
-        comboBoxGroup.addActionListener(evt -> SelectRCM(evt));
+        comboBoxGroup.addActionListener(evt -> SelectRCM(evt));//enhance
+        groupComboBox.addActionListener(evt->SelectRCMStats(evt));
         buttonSubmit.addActionListener(evt -> SubmitTotalItems(evt));
         buttonFrequentlyUsed.addActionListener(evt -> SubmitFrequentlyUsed(evt));
         buttonWeightValue.addActionListener(evt->SubmitWeightValue(evt));
+
 
         loadGroup();
         LoadMonth();
@@ -179,6 +380,20 @@ public class RmosMain extends ApplicationFrame{
 
 
         frame.setVisible(true);
+    }
+    //Pattern (Mediator may be) enhance
+    @SuppressWarnings("serial")
+    class CustomeBorder extends AbstractBorder {
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y,
+                                int width, int height) {
+            // TODO Auto-generated method stubs
+            super.paintBorder(c, g, x, y, width, height);
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setStroke(new BasicStroke(12));
+            g2d.setColor(Color.gray);
+            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
+        }
     }
     private void SubmitGroup(ActionEvent e)
     {
@@ -198,10 +413,9 @@ public class RmosMain extends ApplicationFrame{
 
             boolean status=DBConn.instance().InsertGroups(txtGroupID.getText(),txtGroupName.getText());
             loadGroup();
-            if(status)
-            {
-                lblError.setText("Success");
-            }
+
+                lblError.setText("Group created");
+
 
         }
     }
@@ -226,11 +440,11 @@ public class RmosMain extends ApplicationFrame{
         }
         else
         {
-            boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
-            if(status)
-            {
-                lblError.setText("Success");
-            }
+            //Builder pattern applied
+            //boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
+            DBConn.instance().InsertRCM(new RCMCreate.RCMCreateBuilder().withGroupId(groupIds.getSelectedItem().toString()).withRCMId(rcmId.getText()).withCapacity(Double.parseDouble(rcmCapacity.getText())).withCapacityLeft(Double.parseDouble(rcmCapacity.getText())).withMoney(Double.parseDouble(money.getText())).withLocation(rcmLocation.getText()).withOpStatus("inactive").build());
+            lblError.setText("RCM created");
+
         }
 
     }
@@ -239,6 +453,13 @@ public class RmosMain extends ApplicationFrame{
         try {
             ResultSet result = DBConn.instance().GetGroups();
             groupIds.removeAllItems();
+            comboBoxGroup.removeAllItems();
+            groupComboBox.removeAllItems();
+
+            groupIds.addItem("--Select--");
+            comboBoxGroup.addItem("--Select--");
+
+            groupComboBox.addItem("--Select--");
             while (result.next())
             {
 
@@ -258,6 +479,7 @@ public class RmosMain extends ApplicationFrame{
         try {
             ResultSet result = DBConn.instance().GetRCM(groupId);
             comboBoxRCM.removeAllItems();
+            RCMComboBox.removeAllItems();
             comboBoxRCM.addItem("--Select--");
             RCMComboBox.addItem("--Select--");
             while (result.next())
@@ -277,13 +499,20 @@ public class RmosMain extends ApplicationFrame{
     {
         LoadRCM(comboBoxGroup.getSelectedItem().toString());
     }
+    private void SelectRCMStats(ActionEvent evt)
+    {
+        LoadRCM(groupComboBox.getSelectedItem().toString());
+    }
     private void LoadMonth()
     {
+        comboBoxMonth.removeAllItems();
         comboBoxMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Month--", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));
 
     }
     private void LoadYear()
     {
+        comboBoxYear.removeAllItems();
+
         comboBoxYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Year--"}));
         for (int year = 2015; year <= Calendar.getInstance().get(Calendar.YEAR); year++) {
             comboBoxYear.addItem(year + "");
@@ -291,15 +520,33 @@ public class RmosMain extends ApplicationFrame{
     }
     private void SubmitTotalItems(ActionEvent evt)
     {
-        int count=DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(),comboBoxMonth.getSelectedItem().toString(),comboBoxYear.getSelectedItem().toString());
-        lblMessage.setText("The total number for recycled items for the month "+comboBoxMonth.getSelectedItem().toString()+" is "+count);
+       /* if(comboBoxYear.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select group.");
+        }
+        else if(comboBoxRCM.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select RCM.");
+        }
+        else if(comboBoxMonth.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select month.");
+        }
+        else if(comboBoxYear.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select year.");
+        }
+        else {*/
+            int count = DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(), comboBoxMonth.getSelectedItem().toString(), comboBoxYear.getSelectedItem().toString());
+            lblMessage.setText("The total number of recycled items for the month " + comboBoxMonth.getSelectedItem().toString() + " is " + count);
+        //}
     }
     private void SubmitFrequentlyUsed(ActionEvent evt)
     {
         try {
             ResultSet resultSet = DBConn.instance().GetMostFrequentlyUsedRCM(Integer.parseInt(txtNoOfDays.getText()));
             while (resultSet.next()) {
-                lblFrequentlyUsed.setText("The most frequently used RCM is "+resultSet.getString(1)+" at location "+resultSet.getString(2));
+                lblFrequentlyUsed.setText("The most frequently used RCM is "+resultSet.getString(1)+" located at "+resultSet.getString(2));
             }
         }
         catch(Exception e)
@@ -329,7 +576,7 @@ public class RmosMain extends ApplicationFrame{
                     weightTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
                     dataset.addValue(resultSet.getDouble(2), "RCM", resultSet.getString(1));
                 }
-                BarChart_AWT("Hello", dataset);
+                BarChart_AWT("Weight Stats", dataset);
             }
             else if(valueRadioButton.isSelected())
             {
@@ -338,7 +585,7 @@ public class RmosMain extends ApplicationFrame{
                     valueTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(3)});
                     dataset.addValue(resultSet.getDouble(3), "RCM", resultSet.getString(1));
                 }
-                BarChart_AWT("Hello", dataset);
+                BarChart_AWT("Value Stats", dataset);
 
             }
             else if(emptyTimesRadioButton.isSelected())
@@ -349,7 +596,7 @@ public class RmosMain extends ApplicationFrame{
                     emptyTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
                     dataset.addValue(resultSet.getInt(2), "RCM", resultSet.getString(1));
                 }
-                BarChart_AWT("Hello", dataset);
+                BarChart_AWT("Empty times Stats", dataset);
             }
 
         }
@@ -387,20 +634,26 @@ public class RmosMain extends ApplicationFrame{
                     "RCM",
                     "Empty times",
                     dataset,
+
                     PlotOrientation.VERTICAL,
                     true, true, false);
         }
 
+        CategoryPlot plot = barChart.getCategoryPlot();
+
+        plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
 
         ChartPanel chartPanel=new ChartPanel(barChart);
         //chartPanel.setPreferredSize(new java.awt.Dimension( visualPane.getWidth(),visualPane.getHeight()) );
 
 
 
-        visualPane=new JPanel();
+
         JPanel panel = new JPanel();
         panel.add(chartPanel);
-        visualPane.add(panel);
+        visualPanel=new JPanel();
+        visualPanel.add(panel);
+
         JOptionPane.showMessageDialog(null,panel,"Information",JOptionPane.INFORMATION_MESSAGE);
 
 

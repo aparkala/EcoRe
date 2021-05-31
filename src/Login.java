@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -12,6 +14,7 @@ public class Login extends JPanel{
     private JButton loginButton;
     private JLabel lblUsername;
     private JLabel lblError;
+    private JLabel lblPassword;
     Menu m;
 
 
@@ -26,23 +29,43 @@ public class Login extends JPanel{
         frame.setContentPane(panelLogin);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
+
         loginButton.setFont(new Font("Montserrat", Font.PLAIN, 30));
         loginButton.setForeground(Color.black);
         loginButton.setBounds(420, 365, 350, 90);
 
 
 
+
+       // txtUsername.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        //txtUsername.setMaximumSize(new java.awt.Dimension(300, 54));
+        //txtUsername.setMinimumSize(new java.awt.Dimension(300, 54));
+        //txtUsername.setPreferredSize(new java.awt.Dimension(300, 54));
+
         txtUsername.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        txtUsername.setBackground(Color.white);
+        txtUsername.setForeground(Color.black);
+        txtUsername.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
 
-        txtUsername.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Username", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
-        txtUsername.setMaximumSize(new java.awt.Dimension(300, 54));
-        txtUsername.setMinimumSize(new java.awt.Dimension(300, 54));
-        txtUsername.setPreferredSize(new java.awt.Dimension(300, 54));
+        //passwordField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        //passwordField.setMaximumSize(new java.awt.Dimension(300, 54));
+        //passwordField.setMinimumSize(new java.awt.Dimension(300, 54));
+        //passwordField.setPreferredSize(new java.awt.Dimension(300, 54));
 
-        passwordField.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Password", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
-        passwordField.setMaximumSize(new java.awt.Dimension(300, 54));
-        passwordField.setMinimumSize(new java.awt.Dimension(300, 54));
-        passwordField.setPreferredSize(new java.awt.Dimension(300, 54));
+        passwordField.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        passwordField.setBackground(Color.white);
+        passwordField.setForeground(Color.black);
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+                new CustomeBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        lblUsername.setForeground(Color.black);
+        lblUsername.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblPassword.setForeground(Color.black);
+        lblPassword.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         loginButton.addActionListener(evt -> validateLogin(evt));
         frame.setVisible(true);
@@ -72,6 +95,19 @@ public class Login extends JPanel{
             lblError.setText("Please enter correct Username/Password.");
         }
 
+    }
+    @SuppressWarnings("serial")
+    class CustomeBorder extends AbstractBorder {
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y,
+                                int width, int height) {
+            // TODO Auto-generated method stubs
+            super.paintBorder(c, g, x, y, width, height);
+            Graphics2D g2d = (Graphics2D)g;
+            g2d.setStroke(new BasicStroke(12));
+            g2d.setColor(Color.gray);
+            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
+        }
     }
     public static void main(String[] args)
     {
