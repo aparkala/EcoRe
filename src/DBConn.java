@@ -3,33 +3,33 @@ import java.util.List;
 
 public class DBConn {
 
-    private DBConn() {
-    }
+    private DBConn(){};
 
-    ;
+    static private DBConn instance_  = new DBConn();
 
-    static private DBConn instance_ = new DBConn();
-
-    static public DBConn instance() {
+    static public DBConn instance()
+    {
         return instance_; //return Single instance
     }
 
 
-    boolean InsertGroups(String groupId, String groupName) {
-        boolean status = false;
+    boolean InsertGroups(String groupId,String groupName) {
+        boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
+            Statement stmt=conn.createStatement();
             String query = "INSERT INTO Groups_(groupId,groupName) VALUES (?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, groupId);
-            ps.setString(2, groupName);
-            status = ps.execute();
+            ps.setString(1,groupId);
+            ps.setString(2,groupName);
+            status=ps.execute();
             conn.close();
             return status;
-        } catch (Exception e) {
+        }
+        catch(Exception e)
+        {
             System.out.println(e);
             return status;
         }
@@ -136,45 +136,16 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-
-            String query = "SELECT itemid, itemname, itemprice FROM rcm_items_ natural join items_ on rcm_items_.itemid = items_.itemid where rcm_items_.rcmid=?";
-            //String query = "SELECT rcm_.* FROM rcm_";
+            Statement stmt = conn.createStatement();
+            String query = "SELECT rcmId FROM RCM_ where groupId=?";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1, rcmId);
-            result = ps.executeQuery();
-            /**while (result.next()){
-             RCM rcm = new RCM(result.getString(2), result.getString(3),
-             result.getDouble(4), result.getDouble(5), result.getDouble(8),
-             result.getString(6), Status.valueOf(result.getString(7)));
-             }**/
+            ps.setString(1,groupId);
+            result=ps.executeQuery();
             //conn.close();
-
-        } catch (Exception e) {
-            System.out.println(e);
 
         }
-        return result;
-    }
-
-    public ResultSet getAllItems(){
-        ResultSet result = null;
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-
-            String query = "SELECT * FROM Items_";
-            PreparedStatement ps = conn.prepareStatement(query);
-
-            result = ps.executeQuery();
-            /**while (result.next()){
-             RCM rcm = new RCM(result.getString(2), result.getString(3),
-             result.getDouble(4), result.getDouble(5), result.getDouble(8),
-             result.getString(6), Status.valueOf(result.getString(7)));
-             }**/
-            //conn.close();
-
-        } catch (Exception e) {
+        catch(Exception e)
+        {
             System.out.println(e);
 
         }
