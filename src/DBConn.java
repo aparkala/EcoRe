@@ -130,27 +130,7 @@ public class DBConn {
         // change rcm last emptied
     }
 
-    public ResultSet getRcmItems(String rcmId) {
-        ResultSet result = null;
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
-            String query = "SELECT rcmId FROM RCM_ where groupId=?";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,groupId);
-            result=ps.executeQuery();
-            //conn.close();
 
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-
-        }
-        return result;
-    }
     ResultSet GetRCMItems(String rcmId)
     {
         ResultSet result=null;
@@ -162,6 +142,28 @@ public class DBConn {
             String query = "SELECT RCM_Items_.itemId,Items_.itemName,RCM_Items_.itemPrice FROM RCM_Items_ inner join Items_ on RCM_Items_.itemId=Items_.itemId where RCM_Items_.rcmId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
+            result=ps.executeQuery();
+            //conn.close();
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+
+        }
+        return result;
+    }
+    ResultSet getAllItems()
+    {
+        ResultSet result=null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * from Items_";
+            PreparedStatement ps = conn.prepareStatement(query);
+
             result=ps.executeQuery();
             //conn.close();
 
@@ -409,4 +411,5 @@ public class DBConn {
             return result;
         }
     }
+
 }

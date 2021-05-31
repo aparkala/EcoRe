@@ -154,7 +154,7 @@ public class viewRCM {
 
     private void loadRcmItems(String rcmId) throws SQLException {
         rcmItems = new HashMap<>();
-        ResultSet items = db.getRcmItems(rcmId);
+        ResultSet items = db.GetRCMItems(rcmId);
         while(items.next()) {
             rcmItems.put(items.getString("itemid"), items.getDouble("itemprice"));
         }
