@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="RCM and Stats module added">
-      <change afterPath="$PROJECT_DIR$/src/MainMenu.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RCMCreate.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RMOSMediator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBConn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBConn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Login.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Menu.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMMain.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +52,7 @@
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="project.propGUI" />
   </component>
-  <component name="RunManager" selected="Application.MainMenu">
+  <component name="RunManager" selected="Application.RmosMain">
     <configuration name="MainMenu" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="MainMenu" />
       <module name="EcoRe" />
@@ -103,8 +90,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.MainMenu" />
         <item itemvalue="Application.RmosMain" />
+        <item itemvalue="Application.MainMenu" />
         <item itemvalue="Application.Menu" />
         <item itemvalue="Application.RCMMain" />
         <item itemvalue="Application.dummy" />
@@ -141,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622225532777</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="RCM and Stats module added">
+      <created>1622443843932</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1622443843932</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -187,42 +181,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>21</line>
+          <line>23</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>22</line>
+          <line>24</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>23</line>
+          <line>25</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>19</line>
+          <line>21</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>18</line>
+          <line>20</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>24</line>
+          <line>26</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>25</line>
-          <option name="timeStamp" value="37" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>26</line>
+          <line>28</line>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -371,67 +360,67 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>189</line>
+          <line>260</line>
           <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>190</line>
+          <line>261</line>
           <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>191</line>
+          <line>262</line>
           <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>192</line>
+          <line>263</line>
           <option name="timeStamp" value="109" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>194</line>
+          <line>265</line>
           <option name="timeStamp" value="110" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>193</line>
+          <line>264</line>
           <option name="timeStamp" value="111" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>195</line>
+          <line>266</line>
           <option name="timeStamp" value="112" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>198</line>
+          <line>269</line>
           <option name="timeStamp" value="113" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>197</line>
+          <line>268</line>
           <option name="timeStamp" value="114" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>196</line>
+          <line>267</line>
           <option name="timeStamp" value="115" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>204</line>
+          <line>275</line>
           <option name="timeStamp" value="116" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>206</line>
+          <line>277</line>
           <option name="timeStamp" value="117" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>211</line>
+          <line>282</line>
           <option name="timeStamp" value="118" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -451,22 +440,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>250</line>
+          <line>321</line>
           <option name="timeStamp" value="122" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>252</line>
+          <line>323</line>
           <option name="timeStamp" value="123" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>248</line>
+          <line>319</line>
           <option name="timeStamp" value="124" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>246</line>
+          <line>317</line>
           <option name="timeStamp" value="125" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -844,7 +833,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
-          <line>15</line>
+          <line>17</line>
           <properties class="DBConn" method="InsertGroups">
             <option name="EMULATED" value="true" />
           </properties>
