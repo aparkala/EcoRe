@@ -27,6 +27,11 @@ public class RmosMain {
     private JButton submitGroup;
     private JLabel lblError;
     private JLabel lblRCMError;
+    private JTextField itemName;
+    private JButton itemSubmitButton;
+    private JPanel newItemPanel;
+    private JPanel newItemForm;
+    private JPanel itemSubmitForm;
 
 
     public RmosMain() {

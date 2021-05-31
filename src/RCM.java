@@ -14,7 +14,6 @@ import java.util.List;
 public class RCM {
     private String rcmId;
     private String groupId;
-    private String rcmName;
     private String location;
     private double capacity;
     private double capacityLeft;
@@ -23,20 +22,33 @@ public class RCM {
     private Status status;
     private HashMap<String,Item> availableItems;
     private List<HashMap<Item,Double>> insertedItems;
+
+    /**public RCM(String groupId, String location, double capacity, double capacityLeft, double moneyLeft, String lastEmptiedStr, Status status) {
+        this.groupId = groupId;
+        this.location = location;
+        this.capacity = capacity;
+        this.capacityLeft = capacityLeft;
+        this.moneyLeft = moneyLeft;
+        this.lastEmptiedStr = lastEmptiedStr;
+        this.status = status;
+    }**/
+
     private DBConn db = DBConn.instance();
 
     //Constructor
     public RCM(String rcmID) throws Exception {
-        ResultSet result = db.GetRCM(rcmId);
-        ResultSetMetaData md = result.getMetaData();
+        ResultSet result = db.GetRCM(rcmID);
+        while(result.next()) {
+            this.groupId = result.getString(2);
+            this.location = result.getString(3);
+            this.lastEmptiedStr = result.getString(6);
+            this.status = Status.valueOf(result.getString(7));
+            this.capacity = result.getDouble(4);
+            this.capacityLeft = result.getDouble(5);
+            this.moneyLeft = result.getDouble(8);
+        }
+        System.out.println(this.toString());
 
-        groupId = result.getString(2);
-        location = result.getString(3);
-        lastEmptiedStr = result.getString(6);
-        status = Status.valueOf(result.getString(7));
-        capacity = result.getDouble(4);
-        capacityLeft = result.getDouble(5);
-        moneyLeft = result.getDouble(8);
     }
 
     //Getters and Setters
@@ -48,16 +60,6 @@ public class RCM {
     public void setRcmId(String rcmId)
     {
         this.rcmId=rcmId;
-    }
-
-    public String getRcmName()
-    {
-        return this.rcmName;
-
-    }
-    public void setRcmName(String rcmName)
-    {
-        this.rcmName=rcmName;
     }
 
     public String getLocation()
@@ -88,6 +90,20 @@ public class RCM {
     public void setCapacityLeft(double capacityAvailable)
     {
         this.capacityLeft=capacityAvailable;
+    }
+
+    @Override
+    public String toString() {
+        return "RCM{" +
+                "rcmId='" + rcmId + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", location='" + location + '\'' +
+                ", capacity=" + capacity +
+                ", capacityLeft=" + capacityLeft +
+                ", moneyLeft=" + moneyLeft +
+                ", lastEmptiedStr='" + lastEmptiedStr + '\'' +
+                ", status=" + status +
+                '}';
     }
 
     public double getMoneyLeft()
