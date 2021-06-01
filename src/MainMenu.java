@@ -54,14 +54,14 @@ public class MainMenu extends JFrame{
         txtUsername.setBackground(Color.white);
         txtUsername.setForeground(Color.black);
         txtUsername.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         passwordField.setFont(new Font("Montserrat", Font.PLAIN, 15));
         passwordField.setBackground(Color.white);
         passwordField.setForeground(Color.black);
         passwordField.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         lblUsername.setForeground(Color.black);
@@ -127,19 +127,7 @@ public class MainMenu extends JFrame{
         }
 
     }
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
-                                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D)g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(Color.gray);
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
+
     public void LoadActiveRCM()
     {
         try {

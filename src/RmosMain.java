@@ -87,6 +87,7 @@ public class RmosMain extends ApplicationFrame{
     private JLabel lblFrom;
     private JLabel lblTo;
     private JLabel lblCategory;
+    private JPanel vpane;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
     private String[] RCMVALUE = {"RCM","VALUE"};
@@ -167,7 +168,7 @@ public class RmosMain extends ApplicationFrame{
         txtGroupID.setBackground(Color.white);
         txtGroupID.setForeground(Color.black);
         txtGroupID.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //txtGroupID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -176,7 +177,7 @@ public class RmosMain extends ApplicationFrame{
         txtGroupName.setBackground(Color.white);
         txtGroupName.setForeground(Color.black);
         txtGroupName.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         groupIds.setFont(new Font("Montserrat", Font.PLAIN, 15));
@@ -187,7 +188,7 @@ public class RmosMain extends ApplicationFrame{
         rcmId.setBackground(Color.white);
         rcmId.setForeground(Color.black);
         rcmId.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
        // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -195,7 +196,7 @@ public class RmosMain extends ApplicationFrame{
         rcmCapacity.setBackground(Color.white);
         rcmCapacity.setForeground(Color.black);
         rcmCapacity.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //rcmCapacity.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Capacity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -203,7 +204,7 @@ public class RmosMain extends ApplicationFrame{
         money.setBackground(Color.white);
         money.setForeground(Color.black);
         money.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //money.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Money", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -212,7 +213,7 @@ public class RmosMain extends ApplicationFrame{
         rcmLocation.setBackground(Color.white);
         rcmLocation.setForeground(Color.black);
         rcmLocation.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
        //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -259,14 +260,14 @@ public class RmosMain extends ApplicationFrame{
         txtFromDate.setBackground(Color.white);
         txtFromDate.setForeground(Color.black);
         txtFromDate.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         txtToDate.setFont(new Font("Montserrat", Font.PLAIN, 15));
         txtToDate.setBackground(Color.white);
         txtToDate.setForeground(Color.black);
         txtToDate.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
 
@@ -274,7 +275,7 @@ public class RmosMain extends ApplicationFrame{
         txtNoOfDays.setBackground(Color.white);
         txtNoOfDays.setForeground(Color.black);
         txtNoOfDays.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         submitGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -381,20 +382,8 @@ public class RmosMain extends ApplicationFrame{
 
         frame.setVisible(true);
     }
-    //Pattern (Mediator may be) enhance
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
-                                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D)g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(Color.gray);
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
+
+
     private void SubmitGroup(ActionEvent e)
     {
         lblError.setVisible(true);
@@ -412,8 +401,10 @@ public class RmosMain extends ApplicationFrame{
         {
 
             boolean status=DBConn.instance().InsertGroups(txtGroupID.getText(),txtGroupName.getText());
-            loadGroup();
-
+            //loadGroup();
+            groupIds.addItem(txtGroupID.getText().toString());
+            comboBoxGroup.addItem(txtGroupID.getText().toString());
+            groupComboBox.addItem(txtGroupID.getText().toString());
                 lblError.setText("Group created");
 
 
@@ -452,13 +443,13 @@ public class RmosMain extends ApplicationFrame{
     {
         try {
             ResultSet result = DBConn.instance().GetGroups();
+
             groupIds.removeAllItems();
             comboBoxGroup.removeAllItems();
             groupComboBox.removeAllItems();
 
             groupIds.addItem("--Select--");
             comboBoxGroup.addItem("--Select--");
-
             groupComboBox.addItem("--Select--");
             while (result.next())
             {
@@ -644,21 +635,11 @@ public class RmosMain extends ApplicationFrame{
         plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
 
         ChartPanel chartPanel=new ChartPanel(barChart);
-        //chartPanel.setPreferredSize(new java.awt.Dimension( visualPane.getWidth(),visualPane.getHeight()) );
 
+       chartPanel.setPreferredSize(new Dimension(visualPanel.getWidth(),visualPanel.getHeight()));
 
-
-
-        JPanel panel = new JPanel();
-        panel.add(chartPanel);
-        visualPanel=new JPanel();
-        visualPanel.add(panel);
-
-        JOptionPane.showMessageDialog(null,panel,"Information",JOptionPane.INFORMATION_MESSAGE);
-
-
-
-    }
+       visualPanel.add(chartPanel);
+   }
 
 
     public static void main(String[] args)

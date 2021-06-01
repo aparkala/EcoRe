@@ -46,6 +46,7 @@ public class RCMMain extends FocusAdapter {
     List<Item> itemsList=new ArrayList<>();
     private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
     private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
+    private JFrame frame;
 
 
     public RCMMain(String groupID,String rcmId,String metric)
@@ -60,7 +61,7 @@ public class RCMMain extends FocusAdapter {
     }
     public void initComponents()
     {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setContentPane(panelRCM);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
@@ -296,6 +297,7 @@ public class RCMMain extends FocusAdapter {
         rcmTransactions.stream().forEach(e->e.setCash(cashCoupon));
         DBConn.instance().InsertRCMItems(rcmTransactions);
         DBConn.instance().UpdateCapacityMoney(capacityLeft,moneyLeft,rcmId);
+        frame.dispose();
 
 
     }
