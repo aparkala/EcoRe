@@ -1,19 +1,28 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RCMGroup {
-    private int groupId;
+    private String groupId;
     private String groupName;
-    private int zipCode;
-    private List<RCM> rcmList;
+    private HashMap<String, RCM> rcmMap;
+    DBConn db = DBConn.instance();
 
-    public int getGroupId()
+    public RCMGroup(String groupId, String groupName) throws SQLException {
+        this.groupId = groupId;
+        this.groupName = groupName;
+        rcmMap = new HashMap<>();
+        init();
+    }
+
+    public String getGroupId()
     {
         return this.groupId;
     }
-    public void setGroupId(int groupId)
-    {
-        this.groupId=groupId;
-    }
+
     public String getGroupName()
     {
         return this.groupName;
@@ -23,22 +32,50 @@ public class RCMGroup {
     {
         this.groupName=groupName;
     }
-    public int getZipCode()
-    {
-        return this.zipCode;
 
-    }
-    public void setZipCode(int zipCode)
+    public HashMap<String, RCM> getRcmMap()
     {
-        this.zipCode=zipCode;
-    }
-    public List<RCM> getRcmList()
-    {
-        return this.rcmList;
+        return this.rcmMap;
 
     }
     public void setRcmList(List<RCM> rcmList)
     {
-        this.rcmList=rcmList;
+        this.rcmMap=rcmMap;
+    }
+
+    private void init() throws SQLException {
+        ResultSet result = db.getRCMsFromGroup(this.groupId);
+
+        while(result.next()) {
+            rcmMap.put(result.getString("rcmId"), new RCM.RCMBuilder().withRCMId(result.getString("rcmId"))
+                                .withGroupId(this.groupId)
+                                .withLocation(result.getString("rcmLocation"))
+                                .withOpStatus(Status.valueOf(result.getString("opStatus")))
+                                .withCapacity(result.getDouble("rcmCapacity"))
+                                .withCapacityLeft(result.getDouble("rcmCapacity"))
+                                .withMoney(result.getDouble("money"))
+                                .build());
+        }
+    }
+    void print(){
+        System.out.println("GroupId: " + groupId
+                            + "GroupName: " + groupName);
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
+        for (RCM rcm : rcmMap.values()){
+            rcm.print();
+        }
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    void makeAccept(RcmCounter counter){
+        for (RCM rcm : rcmMap.values()){
+            rcm.accept(counter);
+        }
+    }
+
+    void makeAccept(RmosMain.loadViewPanel loadViewPanel){
+        for (RCM rcm : rcmMap.values()){
+            rcm.accept(loadViewPanel);
+        }
     }
 }

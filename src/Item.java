@@ -2,10 +2,18 @@ public class Item {
     private String itemName;
     private int itemID;
     private double pricePerMetric;
+    private String itemIdStr;
 
     public Item(int itemID,String itemName,double pricePerMetric)
     {
         this.itemID=itemID;
+        this.itemName=itemName;
+        this.pricePerMetric=pricePerMetric;
+    }
+
+    public Item(String itemID,String itemName,double pricePerMetric)
+    {
+        this.itemIdStr=itemID;
         this.itemName=itemName;
         this.pricePerMetric=pricePerMetric;
     }
@@ -32,5 +40,18 @@ public class Item {
     public void setPricePerMetric(double pricePerMetric)
     {
         this.pricePerMetric=pricePerMetric;
+    }
+
+    void print() {
+        System.out.println(this.toString());
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemID=" + itemID +
+                ", pricePerMetric=" + pricePerMetric +
+                ", itemIdStr='" + itemIdStr + '\'' +
+                '}';
     }
 }

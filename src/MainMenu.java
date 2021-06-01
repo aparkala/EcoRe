@@ -4,6 +4,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,7 +87,13 @@ public class MainMenu extends JFrame{
         loginButton.setBounds(300, 205, 200, 30);
 
 
-        loginButton.addActionListener(evt -> validateLogin(evt));
+        loginButton.addActionListener(evt -> {
+            try {
+                validateLogin(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         ImageIcon icon = new ImageIcon("Images/ecore.png");
         lblImage.setIcon(icon);
@@ -100,8 +107,7 @@ public class MainMenu extends JFrame{
 
         frame.setVisible(true);
     }
-    private void validateLogin(ActionEvent e)
-    {
+    private void validateLogin(ActionEvent e) throws SQLException {
         lblError.setVisible(true);
         if(txtUsername.getText().length()==0)
         {

@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.util.ResourceBundle;
 
-public class ViewForm {
+public class ViewForm extends JPanel{
     private JPanel viewFormPanel;
     private JButton viewButton;
     private JComboBox comboBoxGroup;

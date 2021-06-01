@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,24 +90,31 @@ public class RmosMain extends ApplicationFrame{
     private JLabel lblFrom;
     private JLabel lblTo;
     private JLabel lblCategory;
+    private JPanel viewFormPanel;
+    private JPanel viewCardPanel;
+    private JPanel viewCardLayoutPane;
+    private JPanel viewPanel;
+    private ViewForm viewForm1;
+    private JPanel viewPane2;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
     private String[] RCMVALUE = {"RCM","VALUE"};
     private String[] RCMEMPTY = {"RCM","EMPTY"};
+    private ArrayList<RCMButton> rcmButtons;
 
 
-    public RmosMain() {
+    public RmosMain() throws SQLException {
         super( "applicationTitle" );
 
 
         initComponents();
     }
-    public void initComponents()
-    {
+    public void initComponents() throws SQLException {
 
 
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
+        rcmButtons = new ArrayList<>();
        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
@@ -376,10 +386,34 @@ public class RmosMain extends ApplicationFrame{
         loadGroup();
         LoadMonth();
         LoadYear();
-
-
+        new loadViewPanel();
 
         frame.setVisible(true);
+    }
+
+    private RmosMain getOuter() {
+        return this;
+    }
+
+    class loadViewPanel implements Visitor {
+
+        public loadViewPanel() throws SQLException {
+            RMOS rmos = RMOS.get_instance();
+            rmos.loadGroups();
+            rmos.makeAccept(this);
+            loadButtons();
+        }
+
+        @Override
+        public void visit(RCM rcm) {
+            getOuter().rcmButtons.add(new RCMButton(rcm));
+        }
+
+        public void loadButtons(){
+            for (RCMButton rcmButton : rcmButtons) {
+                getOuter().viewFormPanel.add(rcmButton);
+            }
+        }
     }
     //Pattern (Mediator may be) enhance
     @SuppressWarnings("serial")
@@ -661,8 +695,7 @@ public class RmosMain extends ApplicationFrame{
     }
 
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws SQLException {
         RmosMain r=new RmosMain();
     }
 
