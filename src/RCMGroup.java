@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RCMGroup {
+public class RCMGroup implements Component {
     private String groupId;
     private String groupName;
     private HashMap<String, RCM> rcmMap;
@@ -38,7 +38,7 @@ public class RCMGroup {
         return this.rcmMap;
 
     }
-    public void setRcmList(List<RCM> rcmList)
+    public void setRcmMap(List<RCM> rcmList)
     {
         this.rcmMap=rcmMap;
     }
@@ -67,15 +67,22 @@ public class RCMGroup {
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    void makeAccept(RcmCounter counter){
+    @Override
+    public void accept(RcmCounter counter) {
         for (RCM rcm : rcmMap.values()){
             rcm.accept(counter);
         }
     }
 
-    void makeAccept(RmosMain.loadViewPanel loadViewPanel){
+    @Override
+    public void accept(RmosMain.loadViewPanel buttonLoader) {
         for (RCM rcm : rcmMap.values()){
-            rcm.accept(loadViewPanel);
+            rcm.accept(buttonLoader);
         }
+    }
+
+    @Override
+    public void accept() {
+
     }
 }

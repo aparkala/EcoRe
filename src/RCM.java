@@ -13,7 +13,7 @@ import java.util.List;
  * TODO : Builder or Prototype Pattern
  */
 
-public class RCM implements Visitable {
+public class RCM implements Component {
     private String rcmId;
     private String groupId;
     private String location;
@@ -97,6 +97,11 @@ public class RCM implements Visitable {
         while(resultSet.next()) {
             itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getString("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
         }
+    }
+
+    @Override
+    public void accept() {
+
     }
 
     public static class RCMBuilder {

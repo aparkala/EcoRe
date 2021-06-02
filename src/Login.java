@@ -99,7 +99,7 @@ public class Login extends JPanel{
     @SuppressWarnings("serial")
     class CustomeBorder extends AbstractBorder {
         @Override
-        public void paintBorder(Component c, Graphics g, int x, int y,
+        public void paintBorder(java.awt.Component c, Graphics g, int x, int y,
                                 int width, int height) {
             // TODO Auto-generated method stubs
             super.paintBorder(c, g, x, y, width, height);

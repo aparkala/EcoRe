@@ -180,6 +180,29 @@ public class DBConn {
         }
     }
 
+    boolean insertItem(String itemId, String itemName) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "INSERT INTO Items_(itemId,itemName) VALUES (?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,itemId);
+            ps.setString(2,itemName);
+
+            status=ps.execute();
+            conn.close();
+            return status;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return status;
+        }
+    }
+
     boolean changeItemPrice(String rcmId, String itemId, Double newPrice) {
         boolean status=false;
         try {
