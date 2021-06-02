@@ -16,32 +16,27 @@ public class viewRCM {
     private JPanel viewRcmPane;
     private JButton activateDeactivateButton;
     private JTable statusTable;
-    private JTabbedPane addModifyTab;
     private JButton emptyButton;
     private JFormattedTextField newItemPrice;
     private JButton addButton;
     private JComboBox modifyItemCB;
     private JFormattedTextField modifiedItemPrice;
     private JButton modifyButton;
-    private JPanel buttonPane;
-    private JSplitPane modifySplitPane;
-    private JPanel statusPane;
-    private JPanel addTab;
-    private JPanel modifyTab;
-    private JPanel addButtonPane;
-    private JPanel modifyButtonPane;
     private JComboBox addItemCB;
-    private JPanel addLblErrorPanel;
-    private JPanel modifyLblErrorPanel;
     private JLabel addLbl;
     private JLabel modifyLbl;
-    private JPanel removeTab;
     private JComboBox removeItemCB;
     private JButton removeButton;
-    private JLabel removeItemLbl;
-    private JPanel removeButtonPane;
     private JLabel removeLbl;
     private JButton deleteButton;
+    private JLabel lblStatus;
+    private JTabbedPane tabbedPane1;
+    private JLabel lblHeader;
+    private JLabel lblItemName;
+    private JLabel lblItemPrice;
+    private JLabel lblSelectItem;
+    private JLabel lblNewPrice;
+    private JLabel lblRemoveSelectItem;
     RCM rcm;
     RMOS rmos;
 
@@ -61,7 +56,77 @@ public class viewRCM {
         frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
+
+        lblStatus.setForeground(Color.white);
+        lblStatus.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblHeader.setForeground(Color.white);
+        lblHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblItemName.setForeground(Color.black);
+        lblItemName.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblItemPrice.setForeground(Color.black);
+        lblItemPrice.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblNewPrice.setForeground(Color.black);
+        lblNewPrice.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblSelectItem.setForeground(Color.black);
+        lblSelectItem.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblRemoveSelectItem.setForeground(Color.black);
+        lblRemoveSelectItem.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        modifyItemCB.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        addItemCB.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        removeItemCB.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        modifiedItemPrice.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        modifiedItemPrice.setBackground(Color.white);
+        modifiedItemPrice.setForeground(Color.black);
+        modifiedItemPrice.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        newItemPrice.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        newItemPrice.setBackground(Color.white);
+        newItemPrice.setForeground(Color.black);
+        newItemPrice.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+
+
+        addButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        addButton.setForeground(Color.black);
+        addButton.setBounds(420, 365, 350, 90);
+
+        removeButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        removeButton.setForeground(Color.black);
+        removeButton.setBounds(420, 365, 350, 90);
+
+        modifyButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        modifyButton.setForeground(Color.black);
+        modifyButton.setBounds(420, 365, 350, 90);
+
+        activateDeactivateButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        activateDeactivateButton.setForeground(Color.black);
+        activateDeactivateButton.setBounds(420, 365, 350, 90);
+
+        deleteButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        deleteButton.setForeground(Color.black);
+        deleteButton.setBounds(420, 365, 350, 90);
+
+        emptyButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        emptyButton.setForeground(Color.black);
+        emptyButton.setBounds(420, 365, 350, 90);
+
+
+
+       // frame.pack();
         loadStatusTable();
         loadAddItems();
         loadModifyItems();

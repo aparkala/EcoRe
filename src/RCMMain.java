@@ -7,6 +7,8 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.sql.ResultSet;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,6 +48,8 @@ public class RCMMain extends FocusAdapter {
     List<Item> itemsList=new ArrayList<>();
     private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
     private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
+    private JFrame frame;
+    DecimalFormat df=new DecimalFormat("0.00");
 
 
     public RCMMain(String groupID,String rcmId,String metric)
@@ -60,7 +64,7 @@ public class RCMMain extends FocusAdapter {
     }
     public void initComponents()
     {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setContentPane(panelRCM);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
@@ -169,7 +173,14 @@ public class RCMMain extends FocusAdapter {
         lblError.setForeground(Color.white);
         lblError.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
-        buttonInsert.addActionListener(evt -> InsertRCMItems(evt));
+        buttonInsert.addActionListener(evt -> {
+            try {
+                InsertRCMItems(evt);
+            } catch (ParseException e) {
+
+
+            }
+        });
         submitButton.addActionListener(evt -> SubmitItems(evt));
 
 
@@ -177,8 +188,7 @@ public class RCMMain extends FocusAdapter {
     }
 
 
-    private void InsertRCMItems(ActionEvent e)
-    {
+    private void InsertRCMItems(ActionEvent e) throws ParseException {
         if(txtItem.getText().isEmpty())
         {
             lblError.setText("Please enter item type");
@@ -214,7 +224,16 @@ public class RCMMain extends FocusAdapter {
             //enhance
             if(metric=="kgs")
             {
-                price=price/0.45359237;
+                try {
+
+                    String format = df.format(price / 0.45359237);
+                    price = (Double) df.parse(format);
+                }
+                catch (ParseException ex)
+                {
+                    System.out.println(ex);
+                }
+
             }
             rcmTransactions.add(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId).withRCMId(rcmId).withItemId(itemId).withItemPrice(price).withInsertedDate(insertedDate).withWeight(weight).withCash(1).withIsEmpty(0).withGroupId(groupID).build());
             submitButton.setEnabled(true);
@@ -234,7 +253,17 @@ public class RCMMain extends FocusAdapter {
                 }
                 else if(metric=="kgs")
                 {
-                    metricItemPrice=result.getDouble("itemPrice")*0.45359237;
+                    try {
+
+
+                        String format = df.format(result.getDouble("itemPrice") * 0.45359237);
+                        metricItemPrice = (Double) df.parse(format);
+                    }
+                    catch (ParseException ex)
+                    {
+                        System.out.println(ex);
+                    }
+
                 }
                 Item item=new Item(result.getInt(1),result.getString(2),metricItemPrice);
                 itemsList.add(item);
@@ -296,6 +325,7 @@ public class RCMMain extends FocusAdapter {
         rcmTransactions.stream().forEach(e->e.setCash(cashCoupon));
         DBConn.instance().InsertRCMItems(rcmTransactions);
         DBConn.instance().UpdateCapacityMoney(capacityLeft,moneyLeft,rcmId);
+        frame.dispose();
 
 
     }

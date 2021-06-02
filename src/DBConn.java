@@ -44,8 +44,8 @@ public class DBConn {
             Statement stmt = conn.createStatement();
             String query = "INSERT INTO RCM_(rcmId,groupId,rcmLocation,rcmCapacity,capacityLeft,money,opStatus) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,rcmCreate.getGroupId());
-            ps.setString(2,rcmCreate.getRcmId());
+            ps.setString(1,rcmCreate.getRcmId());
+            ps.setString(2,rcmCreate.getGroupId());
             ps.setString(3,rcmCreate.getLocation());
             ps.setDouble(4,rcmCreate.getCapacity());
             ps.setDouble(5,rcmCreate.getCapacityLeft());

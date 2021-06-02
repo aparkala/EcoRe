@@ -55,14 +55,14 @@ public class MainMenu extends JFrame{
         txtUsername.setBackground(Color.white);
         txtUsername.setForeground(Color.black);
         txtUsername.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         passwordField.setFont(new Font("Montserrat", Font.PLAIN, 15));
         passwordField.setBackground(Color.white);
         passwordField.setForeground(Color.black);
         passwordField.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         lblUsername.setForeground(Color.black);

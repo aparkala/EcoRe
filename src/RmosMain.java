@@ -108,8 +108,9 @@ public class RmosMain extends ApplicationFrame{
     private ArrayList<RCMButton> rcmButtons;
     RMOS rmos;
 
+    private JPanel viewFormPanel;
 
-    public RmosMain() throws SQLException {
+    public RmosMain() throws SQLException{
         super( "applicationTitle" );
 
         rmos = RMOS.get_instance();
@@ -138,6 +139,9 @@ public class RmosMain extends ApplicationFrame{
 
         lblGroupId.setForeground(Color.black);
         lblGroupId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblNoOfDays.setForeground(Color.black);
+        lblNoOfDays.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         lblGroupName.setForeground(Color.black);
         lblGroupName.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -184,7 +188,7 @@ public class RmosMain extends ApplicationFrame{
         txtGroupID.setBackground(Color.white);
         txtGroupID.setForeground(Color.black);
         txtGroupID.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //txtGroupID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -193,7 +197,7 @@ public class RmosMain extends ApplicationFrame{
         txtGroupName.setBackground(Color.white);
         txtGroupName.setForeground(Color.black);
         txtGroupName.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         groupIds.setFont(new Font("Montserrat", Font.PLAIN, 15));
@@ -204,7 +208,7 @@ public class RmosMain extends ApplicationFrame{
         rcmId.setBackground(Color.white);
         rcmId.setForeground(Color.black);
         rcmId.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
        // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -212,7 +216,7 @@ public class RmosMain extends ApplicationFrame{
         rcmCapacity.setBackground(Color.white);
         rcmCapacity.setForeground(Color.black);
         rcmCapacity.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //rcmCapacity.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Capacity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -220,7 +224,7 @@ public class RmosMain extends ApplicationFrame{
         money.setBackground(Color.white);
         money.setForeground(Color.black);
         money.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
         //money.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Money", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
@@ -229,30 +233,30 @@ public class RmosMain extends ApplicationFrame{
         rcmLocation.setBackground(Color.white);
         rcmLocation.setForeground(Color.black);
         rcmLocation.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
        //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         comboBoxGroup.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        comboBoxGroup.setBorder(BorderFactory.createTitledBorder(null, "Group", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        comboBoxGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
         comboBoxGroup.setModel(new DefaultComboBoxModel());
 
         comboBoxRCM.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        comboBoxRCM.setBorder(BorderFactory.createTitledBorder(null, "RCM", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        comboBoxRCM.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "RCM", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         comboBoxMonth.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        comboBoxMonth.setBorder(BorderFactory.createTitledBorder(null, "Month", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        comboBoxMonth.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Month", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
 
         comboBoxYear.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        comboBoxYear.setBorder(BorderFactory.createTitledBorder(null, "Year", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        comboBoxYear.setBorder(BorderFactory.createTitledBorder(null, "Year", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
 
         groupComboBox.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        groupComboBox.setBorder(BorderFactory.createTitledBorder(null, "Group", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        groupComboBox.setBorder(BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         RCMComboBox.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        RCMComboBox.setBorder(BorderFactory.createTitledBorder(null, "RCM", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
+        RCMComboBox.setBorder(BorderFactory.createTitledBorder(null, "RCM", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         lblCategory.setForeground(Color.black);
         lblCategory.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -276,14 +280,14 @@ public class RmosMain extends ApplicationFrame{
         txtFromDate.setBackground(Color.white);
         txtFromDate.setForeground(Color.black);
         txtFromDate.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         txtToDate.setFont(new Font("Montserrat", Font.PLAIN, 15));
         txtToDate.setBackground(Color.white);
         txtToDate.setForeground(Color.black);
         txtToDate.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
 
@@ -291,7 +295,7 @@ public class RmosMain extends ApplicationFrame{
         txtNoOfDays.setBackground(Color.white);
         txtNoOfDays.setForeground(Color.black);
         txtNoOfDays.setBorder(BorderFactory.createCompoundBorder(
-                new CustomeBorder(),
+                new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         submitGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -462,19 +466,7 @@ public class RmosMain extends ApplicationFrame{
         }
     }
     //Pattern (Mediator may be) enhance
-    @SuppressWarnings("serial")
-    class CustomeBorder extends AbstractBorder {
-        @Override
-        public void paintBorder(java.awt.Component c, Graphics g, int x, int y,
-                                int width, int height) {
-            // TODO Auto-generated method stubs
-            super.paintBorder(c, g, x, y, width, height);
-            Graphics2D g2d = (Graphics2D)g;
-            g2d.setStroke(new BasicStroke(12));
-            g2d.setColor(Color.gray);
-            g2d.drawRoundRect(x, y, width - 1, height - 1, 25, 25);
-        }
-    }
+
     private void SubmitGroup(ActionEvent e) throws SQLException {
         lblError.setVisible(true);
         if(txtGroupID.getText().length()<1)
@@ -730,26 +722,15 @@ public class RmosMain extends ApplicationFrame{
         plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
 
         ChartPanel chartPanel=new ChartPanel(barChart);
-        //chartPanel.setPreferredSize(new java.awt.Dimension( visualPane.getWidth(),visualPane.getHeight()) );
-
-
-
-
-        JPanel panel = new JPanel();
-        panel.add(chartPanel);
-        visualPanel=new JPanel();
-        visualPanel.add(panel);
-
-        JOptionPane.showMessageDialog(null,panel,"Information",JOptionPane.INFORMATION_MESSAGE);
+        chartPanel.setPreferredSize(new java.awt.Dimension(visualPanel.getWidth(),visualPanel.getHeight()) );
+        visualPanel.add(chartPanel);
 
 
 
     }
 
 
-    public static void main(String[] args) throws SQLException {
-        RmosMain r=new RmosMain();
-    }
+
 
 }
 
