@@ -1,5 +1,8 @@
 public enum Status {
-    active,
+    ACTIVE,
     INACTIVE,
+    FULL,
+    active,
+    inactive,
     full;
 }

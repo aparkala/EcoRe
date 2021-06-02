@@ -10,7 +10,6 @@ public class RMOS {
     private static final RMOS singleton = new RMOS();
     private HashMap<String,RCMGroup> groupMap = new HashMap<>();
     DBConn db = DBConn.instance();
-    RcmCounter counter = new RcmCounter();
     int numberOfRCMs;
     private HashMap<String, String> itemMapToId = new HashMap<>();
     private HashMap<String, String> itemMapToName = new HashMap<>();
@@ -33,7 +32,6 @@ public class RMOS {
         }
         for (RCMGroup rcmGroup : groupMap.values()) {
             rcmGroup.print();
-            rcmGroup.accept(counter);
         }
 
         ResultSet resultSet = db.getAllItems();
@@ -100,21 +98,28 @@ public class RMOS {
         return "Item successfully added";
     }
 
-    public void deactivate(RCM rcm){
+    RCM getRCM(String groupId, String rcmID){
+        return groupMap.get(groupId).getRcmMap().get(rcmID);
+    }
 
+    public void deactivate(RCM rcm){
+        rcm.deactivate();
+        //insert transaction
     }
 
     public void activate(RCM rcm){
-
+        rcm.activate();
+        //insert transaction
     }
 
     public void empty(RCM rcm){
+        rcm.empty();
+        //insert transaction?
 
     }
     public static void main(String args[]) throws SQLException {
         RMOS rmos = new RMOS().get_instance();
         rmos.init();
-        System.out.println(rmos.counter.counter);
     }
 
 

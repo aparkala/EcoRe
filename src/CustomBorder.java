@@ -4,7 +4,7 @@ import java.awt.*;
 public class CustomBorder extends AbstractBorder{
 
         @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height)
+        public void paintBorder(java.awt.Component c, Graphics g, int x, int y, int width, int height)
        {
             // TODO Auto-generated method stubs
             super.paintBorder(c, g, x, y, width, height);

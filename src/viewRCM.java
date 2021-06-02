@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
@@ -124,6 +125,12 @@ public class viewRCM {
         emptyButton.setForeground(Color.black);
         emptyButton.setBounds(420, 365, 350, 90);
 
+        activateDeactivateButton.addActionListener(evt -> switchPower(evt));
+        emptyButton.addActionListener(evt -> emptyRCM(evt));
+        deleteButton.addActionListener(evt -> deleteRCM(evt));
+        addButton.addActionListener(evt -> addItem(evt));
+        modifyButton.addActionListener(evt -> modifyItem(evt));
+        removeButton.addActionListener(evt -> removeItem(evt));
 
 
        // frame.pack();
@@ -136,7 +143,7 @@ public class viewRCM {
     }
 
     private void loadButtons(){
-        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL"))){
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
             activateDeactivateButton.setText("DEACTIVATE");
         }
         else {
@@ -149,13 +156,8 @@ public class viewRCM {
         else {
             emptyButton.setVisible(false);
         }
+        loadStatusTable();
 
-        activateDeactivateButton.addActionListener(evt -> switchPower(evt));
-        emptyButton.addActionListener(evt -> emptyRCM(evt));
-        deleteButton.addActionListener(evt -> deleteRCM(evt));
-        addButton.addActionListener(evt -> addItem(evt));
-        modifyButton.addActionListener(evt -> modifyItem(evt));
-        removeButton.addActionListener(evt -> removeItem(evt));
     }
 
     private void deleteRCM(ActionEvent actionEvent){
@@ -268,12 +270,13 @@ public class viewRCM {
     }
 
     private void switchPower(ActionEvent e){
-        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL"))){
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
             rmos.deactivate(rcm);
         }
         else {
            rmos.activate(rcm);
         }
+        rcm.toString();
         loadButtons();
     }
 

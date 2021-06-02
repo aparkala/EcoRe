@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RCMGroup implements Component {
+public class RCMGroup implements VisitableComponent{
     private String groupId;
     private String groupName;
     private HashMap<String, RCM> rcmMap;
@@ -67,12 +67,6 @@ public class RCMGroup implements Component {
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    @Override
-    public void accept(RcmCounter counter) {
-        for (RCM rcm : rcmMap.values()){
-            rcm.accept(counter);
-        }
-    }
 
     @Override
     public void accept(RmosMain.loadViewPanel buttonLoader) {
@@ -81,8 +75,4 @@ public class RCMGroup implements Component {
         }
     }
 
-    @Override
-    public void accept() {
-
-    }
 }

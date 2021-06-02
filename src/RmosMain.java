@@ -108,7 +108,6 @@ public class RmosMain extends ApplicationFrame{
     private ArrayList<RCMButton> rcmButtons;
     RMOS rmos;
 
-    private JPanel viewFormPanel;
 
     public RmosMain() throws SQLException{
         super( "applicationTitle" );

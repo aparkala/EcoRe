@@ -26,12 +26,14 @@ public class MainMenu extends JFrame{
     private JLabel lblPassword;
     private JLabel lblMetric;
     private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
+    RMOS rmos;
 
 
     private String metric;
 
     public MainMenu()
     {
+        rmos = RMOS.get_instance();
         initComponents();
         LoadActiveRCM();
     }
