@@ -114,6 +114,32 @@ public class DBConn {
         return result;
     }
 
+    ResultSet GetRCMs(String rcmId) throws Exception {
+        ResultSet result = null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+
+            String query = "SELECT rcm_.* FROM rcm_ where rcmId=?";
+            //String query = "SELECT rcm_.* FROM rcm_";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, rcmId);
+            result = ps.executeQuery();
+            /**while (result.next()){
+             RCM rcm = new RCM(result.getString(2), result.getString(3),
+             result.getDouble(4), result.getDouble(5), result.getDouble(8),
+             result.getString(6), Status.valueOf(result.getString(7)));
+             }**/
+            //conn.close();
+
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
+        return result;
+    }
+
     public void setStatusActive(String rcmID){
         // change rcm status to ACTIVE
     }
@@ -130,6 +156,95 @@ public class DBConn {
         // change rcm last emptied
     }
 
+    boolean insertRcmItem(String rcmId, String itemId, Double price) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "INSERT INTO RCM_Items_(rcmId,itemId,itemPrice) VALUES (?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,rcmId);
+            ps.setString(2,itemId);
+            ps.setDouble(3,price);
+
+            status=ps.execute();
+            conn.close();
+            return status;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return status;
+        }
+    }
+
+    boolean changeItemPrice(String rcmId, String itemId, Double newPrice) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "UPDATE RCM_Items_ SET itemPrice=? WHERE rcmId=? AND itemId=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDouble(1,newPrice);
+            ps.setString(2,rcmId);
+            ps.setString(3,itemId);
+
+            status=ps.execute();
+            conn.close();
+            return status;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return status;
+        }
+    }
+
+    void removeRcmItem(String rcmId, String itemId) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "DELETE FROM RCM_Items_ WHERE rcmId=? AND itemId=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,rcmId);
+            ps.setString(2,itemId);
+
+            status=ps.execute();
+            conn.close();
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+
+    ResultSet getGroupIds() {
+        ResultSet result=null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * from Groups_";
+            PreparedStatement ps = conn.prepareStatement(query);
+            result=ps.executeQuery();
+            //conn.close();
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+
+        }
+        return result;
+    }
 
     ResultSet GetRCMItems(String rcmId)
     {
@@ -153,6 +268,31 @@ public class DBConn {
         }
         return result;
     }
+
+    ResultSet getRCMsFromGroup(String groupId)
+    {
+        ResultSet result=null;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            Statement stmt = conn.createStatement();
+            String query = "SELECT * from RCM_ where groupId=?";
+
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,groupId);
+            result=ps.executeQuery();
+            //conn.close();
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+
+        }
+        return result;
+    }
+
     ResultSet getAllItems()
     {
         ResultSet result=null;

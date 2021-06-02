@@ -1,5 +1,7 @@
+import javax.swing.*;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,17 +13,43 @@ import java.util.List;
  * TODO : Builder or Prototype Pattern
  */
 
-public class RCM {
+public class RCM implements Visitable {
     private String rcmId;
     private String groupId;
     private String location;
     private double capacity;
     private double capacityLeft;
-    private double moneyLeft;
+    private double money;
     private String lastEmptiedStr;
-    private Status status;
-    private HashMap<String,Item> availableItems;
+    private Status opStatus;
+    private HashMap<String,Item> itemMap;
     private List<HashMap<Item,Double>> insertedItems;
+    private DBConn db = DBConn.instance();
+
+    @Override
+    public void accept(RcmCounter counter) {
+        counter.visit(this);
+    }
+
+    @Override
+    public void accept(RmosMain.loadViewPanel buttonLoader) {
+        buttonLoader.visit(this);
+    }
+
+    public RCM(String rcmId) throws Exception {
+        this.rcmId = rcmId;
+        ResultSet result = db.GetRCM(rcmId);
+        while (result.next()) {
+            this.groupId = result.getString(2);
+            this.location = result.getString(3);
+            this.lastEmptiedStr = result.getString(6);
+            this.opStatus = Status.valueOf(result.getString(7));
+            this.capacity = result.getDouble(4);
+            this.capacityLeft = result.getDouble(5);
+            this.money = result.getDouble(8);
+
+        }
+    }
 
     /**public RCM(String groupId, String location, double capacity, double capacityLeft, double moneyLeft, String lastEmptiedStr, Status status) {
         this.groupId = groupId;
@@ -31,24 +59,100 @@ public class RCM {
         this.moneyLeft = moneyLeft;
         this.lastEmptiedStr = lastEmptiedStr;
         this.status = status;
+     public RCM(String rcmId) throws Exception {
+     this.rcmId = rcmId;
+     ResultSet result = db.GetRCM(rcmId);
+     while(result.next()) {
+     this.groupId = result.getString(2);
+     this.location = result.getString(3);
+     this.lastEmptiedStr = result.getString(6);
+     this.status = Status.valueOf(result.getString(7));
+     this.capacity = result.getDouble(4);
+     this.capacityLeft = result.getDouble(5);
+     this.moneyLeft = result.getDouble(8);
+     }
+     System.out.println(this.toString());
+
+     }
     }**/
 
-    private DBConn db = DBConn.instance();
-
     //Constructor
-    public RCM(String rcmID) throws Exception {
-        ResultSet result = db.GetRCM(rcmID);
-        while(result.next()) {
-            this.groupId = result.getString(2);
-            this.location = result.getString(3);
-            this.lastEmptiedStr = result.getString(6);
-            this.status = Status.valueOf(result.getString(7));
-            this.capacity = result.getDouble(4);
-            this.capacityLeft = result.getDouble(5);
-            this.moneyLeft = result.getDouble(8);
-        }
-        System.out.println(this.toString());
 
+
+    private RCM(RCM.RCMBuilder rb) throws SQLException {
+        this.groupId=rb.groupId;
+        this.rcmId = rb.rcmId;
+        this.capacity = rb.capacity;
+        this.capacityLeft = rb.capacityLeft;
+        this.money = rb.money;
+        this.location = rb.location;
+        this.opStatus = rb.opStatus;
+        itemMap = new HashMap<>();
+        insertedItems = new ArrayList<>();
+        init();
+    }
+
+    void init() throws SQLException {
+        ResultSet resultSet = db.GetRCMItems(this.rcmId);
+        while(resultSet.next()) {
+            itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getString("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
+        }
+    }
+
+    public static class RCMBuilder {
+        private String rcmId;
+        private String groupId;
+        private String location;
+        private double capacity;
+        private double capacityLeft;
+        private double money;
+        private String lastEmptiedStr;
+        private Status opStatus;
+
+        public RCMBuilder() {
+
+        }
+
+        public RCM.RCMBuilder withRCMId(String rcmId) {
+            this.rcmId = rcmId;
+            return this;
+        }
+
+        public RCM.RCMBuilder withGroupId(String groupId) {
+            this.groupId = groupId;
+            return this;
+        }
+
+        public RCM.RCMBuilder withCapacity(double capacity) {
+            this.capacity = capacity;
+            return this;
+        }
+
+        public RCM.RCMBuilder withCapacityLeft(double capacityLeft) {
+            this.capacityLeft = capacityLeft;
+            return this;
+        }
+
+        public RCM.RCMBuilder withMoney(double money) {
+            this.money = money;
+            return this;
+        }
+
+        public RCM.RCMBuilder withLocation(String location) {
+            this.location = location;
+            return this;
+        }
+
+        public RCM.RCMBuilder withOpStatus(Status opStatus) {
+            this.opStatus = opStatus;
+            return this;
+        }
+
+
+
+        public RCM build() throws SQLException {
+            return new RCM(this);
+        }
     }
 
     //Getters and Setters
@@ -100,20 +204,20 @@ public class RCM {
                 ", location='" + location + '\'' +
                 ", capacity=" + capacity +
                 ", capacityLeft=" + capacityLeft +
-                ", moneyLeft=" + moneyLeft +
+                ", moneyLeft=" + money +
                 ", lastEmptiedStr='" + lastEmptiedStr + '\'' +
-                ", status=" + status +
+                ", status=" + opStatus +
                 '}';
     }
 
     public double getMoneyLeft()
     {
-        return this.moneyLeft;
+        return this.money;
 
     }
     public void setMoneyAvailable(double moneyLeft)
     {
-        this.moneyLeft=moneyLeft;
+        this.money=moneyLeft;
     }
 
     public String getLastEmptiedStr()
@@ -128,22 +232,22 @@ public class RCM {
 
     public Status getStatus()
     {
-        return this.status;
+        return this.opStatus;
 
     }
     public void setStatus(Status status)
     {
-        this.status=status;
+        this.opStatus=status;
     }
 
     public HashMap<String,Item> getAvailableItems()
     {
-        return this.availableItems;
+        return this.itemMap;
 
     }
     public void setAvailableItems(HashMap<String,Item> availableItems)
     {
-        this.availableItems=availableItems;
+        this.itemMap=availableItems;
     }
 
     public List<HashMap<Item,Double>> getInsertedItems()
@@ -165,6 +269,7 @@ public class RCM {
         db.setStatusActive(rcmId);
         //update transaction log?
     }
+    
 
     public void empty() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -175,9 +280,11 @@ public class RCM {
         //update transaction log
     }
 
-/****
- * TODO :   Builder or Prototype Pattern
- *          Implement activate, deactivate and empty methods
-
-****/
+    void print() {
+        System.out.println(this.toString());
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------");
+        for (Item item : itemMap.values()) {
+            item.print();
+        }
+    }
 }

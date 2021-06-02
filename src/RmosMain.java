@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -87,25 +88,25 @@ public class RmosMain extends ApplicationFrame{
     private JLabel lblFrom;
     private JLabel lblTo;
     private JLabel lblCategory;
-    private JPanel vpane;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
     private String[] RCMVALUE = {"RCM","VALUE"};
     private String[] RCMEMPTY = {"RCM","EMPTY"};
+    private ArrayList<RCMButton> rcmButtons;
+    private JPanel viewFormPanel;
 
-
-    public RmosMain() {
+    public RmosMain() throws SQLException{
         super( "applicationTitle" );
 
 
         initComponents();
     }
-    public void initComponents()
-    {
+    public void initComponents() throws SQLException {
 
 
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
+        rcmButtons = new ArrayList<>();
        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
@@ -122,6 +123,9 @@ public class RmosMain extends ApplicationFrame{
 
         lblGroupId.setForeground(Color.black);
         lblGroupId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblNoOfDays.setForeground(Color.black);
+        lblNoOfDays.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         lblGroupName.setForeground(Color.black);
         lblGroupName.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -378,11 +382,35 @@ public class RmosMain extends ApplicationFrame{
         LoadMonth();
         LoadYear();
 
-
+        new loadViewPanel();
 
         frame.setVisible(true);
     }
+    private RmosMain getOuter() {
+        return this;
+    }
 
+    class loadViewPanel implements Visitor {
+
+        public loadViewPanel() throws SQLException {
+            RMOS rmos = RMOS.get_instance();
+            rmos.loadGroups();
+            rmos.makeAccept(this);
+            loadButtons();
+        }
+
+        @Override
+        public void visit(RCM rcm) {
+            getOuter().rcmButtons.add(new RCMButton(rcm));
+        }
+
+        public void loadButtons(){
+            for (RCMButton rcmButton : rcmButtons) {
+                getOuter().viewFormPanel.add(rcmButton);
+            }
+        }
+    }
+    //Pattern (Mediator may be) enhance
 
     private void SubmitGroup(ActionEvent e)
     {
@@ -401,10 +429,8 @@ public class RmosMain extends ApplicationFrame{
         {
 
             boolean status=DBConn.instance().InsertGroups(txtGroupID.getText(),txtGroupName.getText());
-            //loadGroup();
-            groupIds.addItem(txtGroupID.getText().toString());
-            comboBoxGroup.addItem(txtGroupID.getText().toString());
-            groupComboBox.addItem(txtGroupID.getText().toString());
+            loadGroup();
+
                 lblError.setText("Group created");
 
 
@@ -443,13 +469,13 @@ public class RmosMain extends ApplicationFrame{
     {
         try {
             ResultSet result = DBConn.instance().GetGroups();
-
             groupIds.removeAllItems();
             comboBoxGroup.removeAllItems();
             groupComboBox.removeAllItems();
 
             groupIds.addItem("--Select--");
             comboBoxGroup.addItem("--Select--");
+
             groupComboBox.addItem("--Select--");
             while (result.next())
             {
@@ -635,17 +661,15 @@ public class RmosMain extends ApplicationFrame{
         plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
 
         ChartPanel chartPanel=new ChartPanel(barChart);
-
-       chartPanel.setPreferredSize(new Dimension(visualPanel.getWidth(),visualPanel.getHeight()));
-
-       visualPanel.add(chartPanel);
-   }
+        chartPanel.setPreferredSize(new java.awt.Dimension(visualPanel.getWidth(),visualPanel.getHeight()) );
+        visualPanel.add(chartPanel);
 
 
-    public static void main(String[] args)
-    {
-        RmosMain r=new RmosMain();
+
     }
+
+
+
 
 }
 
