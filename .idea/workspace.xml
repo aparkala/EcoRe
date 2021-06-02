@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="Current working-now">
-      <change afterPath="$PROJECT_DIR$/src/RCMButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/RcmCounter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Visitable.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Visitor.java" afterDir="false" />
+    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="View RCM-GUI">
+      <change afterPath="$PROJECT_DIR$/src/KgsMetricFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/KgsMetricStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/LbsMetricFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/LbsMetricStrategy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/MetricFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/MetricStrategy.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/EcoRe.iml" beforeDir="false" afterPath="$PROJECT_DIR$/EcoRe.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBConn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBConn.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Item.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Item.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/MainMenu.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainMenu.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMGroup.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Menu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Menu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RCMMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RMOS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMOS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Status.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ViewForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ViewForm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/viewRCM.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/viewRCM.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/viewRCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/viewRCM.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RCMTransaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMTransaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RMOSMediator.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -30,6 +24,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -49,9 +44,6 @@
         <option name="url" value="https://github.com/aparkala/EcoRe.git" />
       </UrlAndAccount>
     </option>
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1s0Xs6aHeL8K1aHjnVIpCHI9hAQ" />
   <component name="ProjectViewState">
@@ -170,7 +162,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622528119877</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="View RCM-GUI">
+      <created>1622603548720</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1622603548720</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -191,7 +190,8 @@
     <MESSAGE value="RCM and Stats module added" />
     <MESSAGE value="Current working" />
     <MESSAGE value="Current working-now" />
-    <option name="LAST_COMMIT_MESSAGE" value="Current working-now" />
+    <MESSAGE value="View RCM-GUI" />
+    <option name="LAST_COMMIT_MESSAGE" value="View RCM-GUI" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -299,77 +299,77 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>74</line>
+          <line>76</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>77</line>
+          <line>79</line>
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>81</line>
+          <line>83</line>
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>83</line>
+          <line>85</line>
           <option name="timeStamp" value="69" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>87</line>
+          <line>89</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>85</line>
+          <line>87</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>82</line>
+          <line>84</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>247</line>
+          <line>256</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>215</line>
+          <line>223</line>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>216</line>
+          <line>224</line>
           <option name="timeStamp" value="92" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>220</line>
+          <line>228</line>
           <option name="timeStamp" value="93" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>221</line>
+          <line>229</line>
           <option name="timeStamp" value="94" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>209</line>
+          <line>217</line>
           <option name="timeStamp" value="95" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>210</line>
+          <line>218</line>
           <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>211</line>
+          <line>219</line>
           <option name="timeStamp" value="98" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -384,7 +384,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>78</line>
+          <line>80</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
@@ -392,7 +392,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
-          <line>324</line>
+          <line>334</line>
           <option name="timeStamp" value="105" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -695,102 +695,72 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>164</line>
+          <line>199</line>
           <option name="timeStamp" value="212" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>165</line>
+          <line>200</line>
           <option name="timeStamp" value="213" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>166</line>
+          <line>201</line>
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>168</line>
+          <line>203</line>
           <option name="timeStamp" value="215" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>173</line>
-          <option name="timeStamp" value="216" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>177</line>
-          <option name="timeStamp" value="217" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>179</line>
-          <option name="timeStamp" value="218" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>146</line>
+          <line>181</line>
           <option name="timeStamp" value="219" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>147</line>
+          <line>182</line>
           <option name="timeStamp" value="220" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>149</line>
+          <line>184</line>
           <option name="timeStamp" value="221" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>151</line>
+          <line>186</line>
           <option name="timeStamp" value="222" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>182</line>
+          <line>217</line>
           <option name="timeStamp" value="223" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>185</line>
+          <line>220</line>
           <option name="timeStamp" value="224" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>188</line>
+          <line>223</line>
           <option name="timeStamp" value="225" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>192</line>
-          <option name="timeStamp" value="226" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>184</line>
-          <option name="timeStamp" value="227" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>186</line>
-          <option name="timeStamp" value="228" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>190</line>
+          <line>225</line>
           <option name="timeStamp" value="229" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>189</line>
+          <line>224</line>
           <option name="timeStamp" value="230" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
-          <line>193</line>
+          <line>228</line>
           <option name="timeStamp" value="231" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -933,6 +903,111 @@
           <line>56</line>
           <option name="timeStamp" value="260" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/LbsMetricFactory.java</url>
+          <line>11</line>
+          <option name="timeStamp" value="275" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/LbsMetricStrategy.java</url>
+          <line>6</line>
+          <option name="timeStamp" value="276" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="278" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>60</line>
+          <option name="timeStamp" value="279" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>58</line>
+          <option name="timeStamp" value="280" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>57</line>
+          <option name="timeStamp" value="281" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="283" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>135</line>
+          <option name="timeStamp" value="284" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>130</line>
+          <option name="timeStamp" value="285" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>127</line>
+          <option name="timeStamp" value="286" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>136</line>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/MainMenu.java</url>
+          <line>208</line>
+          <option name="timeStamp" value="288" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>276</line>
+          <option name="timeStamp" value="289" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>277</line>
+          <option name="timeStamp" value="290" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>278</line>
+          <option name="timeStamp" value="291" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>255</line>
+          <option name="timeStamp" value="292" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>282</line>
+          <option name="timeStamp" value="293" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/RCMMain.java</url>
+          <line>279</line>
+          <option name="timeStamp" value="294" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/KgsMetricStrategy.java</url>
+          <line>6</line>
+          <option name="timeStamp" value="295" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/KgsMetricStrategy.java</url>
+          <line>7</line>
+          <option name="timeStamp" value="296" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/KgsMetricStrategy.java</url>
+          <line>3</line>
+          <option name="timeStamp" value="297" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/DBConn.java</url>
           <line>15</line>
@@ -949,10 +1024,18 @@
           </properties>
           <option name="timeStamp" value="99" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/LbsMetricStrategy.java</url>
+          <line>4</line>
+          <properties class="LbsMetricStrategy" method="GetMetricPrice">
+            <option name="EMULATED" value="true" />
+          </properties>
+          <option name="timeStamp" value="277" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
-      <inline-watch fileUrl="file://$PROJECT_DIR$/src/MainMenu.java" line="166">
+      <inline-watch fileUrl="file://$PROJECT_DIR$/src/MainMenu.java" line="201">
         <watch expression="&#10;        if(lbsRadioButton.isSelected())&#10;        {&#10;            metric=&quot;lbs&quot;;" />
       </inline-watch>
     </watches-manager>

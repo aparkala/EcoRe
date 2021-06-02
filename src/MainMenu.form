@@ -199,7 +199,7 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="7e579" class="javax.swing.JLabel" binding="lblMetric">
+                      <component id="34786" class="javax.swing.JLabel" binding="lblMetric">
                         <constraints>
                           <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -207,7 +207,7 @@
                           <text value="Metric"/>
                         </properties>
                       </component>
-                      <component id="818ae" class="javax.swing.JRadioButton" binding="lbsRadioButton" default-binding="true">
+                      <component id="c8827" class="javax.swing.JRadioButton" binding="lbsRadioButton" default-binding="true">
                         <constraints>
                           <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -215,7 +215,7 @@
                           <text value="lbs"/>
                         </properties>
                       </component>
-                      <component id="303b7" class="javax.swing.JRadioButton" binding="kgsRadioButton" default-binding="true">
+                      <component id="94bc4" class="javax.swing.JRadioButton" binding="kgsRadioButton" default-binding="true">
                         <constraints>
                           <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                         </constraints>
@@ -223,14 +223,14 @@
                           <text value="kgs"/>
                         </properties>
                       </component>
-                      <hspacer id="cb39e">
-                        <constraints>
-                          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                      </hspacer>
-                      <hspacer id="413f6">
+                      <hspacer id="c8604">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                        </constraints>
+                      </hspacer>
+                      <hspacer id="1526e">
+                        <constraints>
+                          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                         </constraints>
                       </hspacer>
                     </children>

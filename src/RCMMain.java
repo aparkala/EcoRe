@@ -32,7 +32,7 @@ public class RCMMain extends FocusAdapter {
     private JPanel errorPanel;
     private String rcmId;
     private String groupID;
-    private String metric;
+    private String metric="lbs";
     private double pricePerMetric;
     private double price;
     private double weight;
@@ -42,21 +42,23 @@ public class RCMMain extends FocusAdapter {
     private double moneyLeft=0;
     private int transactionId=0;
     //enhance code - design pattern
-    private String[] RCMITEMSLBS = {"Items", "Price/lb"};
-    private String[] RCMITEMSKGS = {"Items","Price/kg"};
+    //private String[] RCMITEMSLBS = {"Items", "Price/lb"};
+    //private String[] RCMITEMSKGS = {"Items","Price/kg"};
     List<RCMTransaction> rcmTransactions=new ArrayList<>();
     List<Item> itemsList=new ArrayList<>();
-    private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
-    private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
+    //private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
+    //private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
     private JFrame frame;
     DecimalFormat df=new DecimalFormat("0.00");
+    private MetricStrategy metricStrategy;
 
 
-    public RCMMain(String groupID,String rcmId,String metric)
+    public RCMMain(String groupID,String rcmId,MetricStrategy metricStrategy)
     {
         this.groupID=groupID;
         this.rcmId=rcmId;
-        this.metric=metric;
+        //this.metric=metric;
+        this.metricStrategy=metricStrategy;
         initComponents();
         LoadRCMItems(rcmId);
         LoadCapacityMoney(rcmId);
@@ -106,7 +108,7 @@ public class RCMMain extends FocusAdapter {
         });*/
 
         //enhance
-        if(metric=="lbs")
+        /*if(metric=="lbs")
         {
             tableRCM.setModel(new DefaultTableModel(RCMITEMSLBS, 0) {public boolean isCellEditable(int row, int column) { return false; }
             });
@@ -121,8 +123,14 @@ public class RCMMain extends FocusAdapter {
             tableInserted.setModel(new DefaultTableModel(RCMINSERTEDITEMSKGS, 0) {
                 public boolean isCellEditable(int row, int column) { return false; }
             });
-        }
+        }*/
 
+        //strategy pattern
+        tableRCM.setModel(new DefaultTableModel(metricStrategy.MetricTableHeader(), 0) {public boolean isCellEditable(int row, int column) { return false; }
+        });
+        tableInserted.setModel(new DefaultTableModel(metricStrategy.MetricItemsTableHeader(), 0) {
+            public boolean isCellEditable(int row, int column) { return false; }
+        });
         tableRCM.setRowHeight(40);
         tableRCM.getTableHeader().setReorderingAllowed(false);
         tableRCM.getTableHeader();
@@ -222,7 +230,7 @@ public class RCMMain extends FocusAdapter {
             DefaultTableModel insertedTableModel = (DefaultTableModel) (tableInserted.getModel());
             insertedTableModel.addRow(new String[]{txtItem.getText(), txtWeight.getText(), String.valueOf(price)});
             //enhance
-            if(metric=="kgs")
+            /*if(metric=="kgs")
             {
                 try {
 
@@ -234,7 +242,8 @@ public class RCMMain extends FocusAdapter {
                     System.out.println(ex);
                 }
 
-            }
+            }*/
+            price= metricStrategy.PutMetricPrice(price); //strategy pattern
             rcmTransactions.add(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId).withRCMId(rcmId).withItemId(itemId).withItemPrice(price).withInsertedDate(insertedDate).withWeight(weight).withCash(1).withIsEmpty(0).withGroupId(groupID).build());
             submitButton.setEnabled(true);
             txtItem.setText("");
@@ -247,7 +256,7 @@ public class RCMMain extends FocusAdapter {
             ResultSet result = DBConn.instance().GetRCMItems(rcmId);
             while (result.next())
             {
-                if(metric=="lbs")
+               /* if(metric=="lbs")
                 {
                     metricItemPrice=result.getDouble("itemPrice");
                 }
@@ -264,7 +273,8 @@ public class RCMMain extends FocusAdapter {
                         System.out.println(ex);
                     }
 
-                }
+                }*/
+                metricItemPrice=metricStrategy.GetMetricPrice(result.getDouble("itemPrice")); //strategy pattern
                 Item item=new Item(result.getInt(1),result.getString(2),metricItemPrice);
                 itemsList.add(item);
                 DefaultTableModel rcmTableModel = (DefaultTableModel)(tableRCM.getModel());

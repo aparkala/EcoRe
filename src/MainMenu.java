@@ -3,6 +3,8 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,8 +17,6 @@ public class MainMenu extends JFrame{
     private JTabbedPane tabbedPane1;
     private JLabel lblImage;
     private JComboBox comboBoxRCM;
-    private JRadioButton lbsRadioButton;
-    private JRadioButton kgsRadioButton;
     private JButton buttonSubmit;
     private JTextField txtUsername;
     private JPasswordField passwordField;
@@ -25,8 +25,12 @@ public class MainMenu extends JFrame{
     private JLabel lblUsername;
     private JLabel lblPassword;
     private JLabel lblMetric;
-    private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
+    private ButtonGroup buttonGroup;
+    private JRadioButton lbsRadioButton;
+    private JRadioButton kgsRadioButton;
 
+    private MetricStrategy metricStrategy;
+    private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
 
     private String metric;
 
@@ -74,10 +78,7 @@ public class MainMenu extends JFrame{
         lblMetric.setForeground(Color.black);
         lblMetric.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
-        lbsRadioButton.setForeground(Color.black);
-        lbsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
-        kgsRadioButton.getUI();
-        kgsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
 
         lblError.setForeground(Color.white);
         lblError.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -98,10 +99,44 @@ public class MainMenu extends JFrame{
         ImageIcon icon = new ImageIcon("Images/ecore.png");
         lblImage.setIcon(icon);
 
-        ButtonGroup group=new ButtonGroup();
-        group.add(lbsRadioButton);
-        group.add(kgsRadioButton);
+
+        lbsRadioButton.setForeground(Color.black);
+        lbsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        kgsRadioButton.getUI();
+        kgsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        buttonGroup=new ButtonGroup();
+        buttonGroup.add(lbsRadioButton);
+        buttonGroup.add(kgsRadioButton);
         lbsRadioButton.setSelected(true);
+        metricStrategy=LbsMetricFactory.getInstance().createMetric();//factory method pattern
+
+
+        lbsRadioButton.addItemListener(new ItemListener()
+        {
+            public void itemStateChanged(ItemEvent e)
+            {
+
+                if(lbsRadioButton.isSelected())
+                {
+                    //Factory method pattern
+                    metricStrategy=LbsMetricFactory.getInstance().createMetric();
+                }
+            }
+        });
+
+        kgsRadioButton.addItemListener(new ItemListener()
+        {
+            public void itemStateChanged(ItemEvent e)
+            {
+
+                if(kgsRadioButton.isSelected())
+                {
+                    //Factory method pattern
+                    metricStrategy=KgsMetricFactory.getInstance().createMetric();
+                }
+            }
+        });
 
         buttonSubmit.addActionListener(evt -> SubmitRCM(evt));
 
@@ -163,15 +198,15 @@ public class MainMenu extends JFrame{
                 groupID=group.getKey();
             }
         }
-        if(lbsRadioButton.isSelected())
+       /* if(lbsRadioButton.isSelected())
         {
             metric="lbs";
         }
         else if(kgsRadioButton.isSelected())
         {
             metric="kgs";
-        }
-        RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metric); //send this via class object
+        }*/
+        RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metricStrategy); //send this via class object
     }
     private void addValues(String key, String value) {
         ArrayList tempList = null;
