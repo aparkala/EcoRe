@@ -1,6 +1,9 @@
 import javax.swing.*;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -88,16 +91,30 @@ public class RmosMain extends ApplicationFrame{
     private JLabel lblFrom;
     private JLabel lblTo;
     private JLabel lblCategory;
+    private JPanel viewFormPanel;
+    private JTextField newItemName;
+    private JPanel submitItemPane;
+    private JButton submitItem;
+    private JTextField newItemId;
+    private JLabel lblItemId;
+    private JLabel lblItemName;
+    private JPanel viewCardPanel;
+    private JPanel viewCardLayoutPane;
+    private JPanel viewPanel;
+    private ViewForm viewForm1;
+    private JPanel viewPane2;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
     private String[] RCMVALUE = {"RCM","VALUE"};
     private String[] RCMEMPTY = {"RCM","EMPTY"};
     private ArrayList<RCMButton> rcmButtons;
-    private JPanel viewFormPanel;
+    RMOS rmos;
+
 
     public RmosMain() throws SQLException{
         super( "applicationTitle" );
 
+        rmos = RMOS.get_instance();
 
         initComponents();
     }
@@ -108,7 +125,7 @@ public class RmosMain extends ApplicationFrame{
         frame.setContentPane(rmosMain);
         rcmButtons = new ArrayList<>();
        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(100, 100, 1200, 725);
+        frame.setBounds(100, 100, 1200, 900);
         frame.setLocationRelativeTo(null);
 
         ImageIcon icon = new ImageIcon("Images/ecore.png");
@@ -168,6 +185,12 @@ public class RmosMain extends ApplicationFrame{
         lblFrequentlyUsed.setForeground(Color.white);
         lblFrequentlyUsed.setFont(new Font("Montserrat", Font.PLAIN, 25));
 
+        lblItemId.setForeground(Color.black);
+        lblItemId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblItemName.setForeground(Color.black);
+        lblItemName.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
         txtGroupID.setFont(new Font("Montserrat", Font.PLAIN, 15));
         txtGroupID.setBackground(Color.white);
         txtGroupID.setForeground(Color.black);
@@ -185,7 +208,7 @@ public class RmosMain extends ApplicationFrame{
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
         groupIds.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        groupIds.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        groupIds.setBorder(BorderFactory.createTitledBorder(null, "Group", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font("Montserrat", Font.PLAIN, 15), Color.black));
 
 
         rcmId.setFont(new Font("Montserrat", Font.PLAIN, 15));
@@ -282,6 +305,20 @@ public class RmosMain extends ApplicationFrame{
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
+        newItemId.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        newItemId.setBackground(Color.white);
+        newItemId.setForeground(Color.black);
+        newItemId.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        newItemName.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        newItemName.setBackground(Color.white);
+        newItemName.setForeground(Color.black);
+        newItemName.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
         submitGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
         submitGroup.setForeground(Color.black);
         submitGroup.setBounds(420, 365, 350, 90);
@@ -302,6 +339,11 @@ public class RmosMain extends ApplicationFrame{
         buttonWeightValue.setFont(new Font("Montserrat", Font.PLAIN, 20));
         buttonWeightValue.setForeground(Color.black);
         buttonWeightValue.setBounds(420, 365, 350, 90);
+
+        submitItem.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        submitItem.setForeground(Color.black);
+        submitItem.setBounds(420, 365, 350, 90);
+
 
         weightRadioButton.addActionListener(new ActionListener() {
             @Override
@@ -369,23 +411,59 @@ public class RmosMain extends ApplicationFrame{
 
 
 
-        submitGroup.addActionListener(evt -> SubmitGroup(evt));
-        rcmSubmit.addActionListener(evt -> SubmitRCM(evt));
         comboBoxGroup.addActionListener(evt -> SelectRCM(evt));//enhance
         groupComboBox.addActionListener(evt->SelectRCMStats(evt));
         buttonSubmit.addActionListener(evt -> SubmitTotalItems(evt));
         buttonFrequentlyUsed.addActionListener(evt -> SubmitFrequentlyUsed(evt));
         buttonWeightValue.addActionListener(evt->SubmitWeightValue(evt));
+        submitItem.addActionListener(evt -> {
+            try {
+                SubmitItem(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
+        submitGroup.addActionListener(evt -> {
+            try {
+                SubmitGroup(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+        rcmSubmit.addActionListener(evt -> {
+            try {
+                SubmitRCM(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         loadGroup();
         LoadMonth();
         LoadYear();
-
         new loadViewPanel();
 
         frame.setVisible(true);
     }
+
+    private void SubmitItem(ActionEvent e) throws SQLException {
+        lblError.setVisible(true);
+        if(newItemName.getText().length()<1)
+        {
+            lblError.setText("Please enter new item name");
+        }
+        else if (newItemId.getText().length()<1)
+        {
+            lblError.setText("Please enter new item ID");
+        }
+        else
+        {
+            lblError.setText(rmos.createItem(newItemId.getText(),newItemName.getText()));
+            loadGroup();
+        }
+    }
+
     private RmosMain getOuter() {
         return this;
     }
@@ -393,8 +471,6 @@ public class RmosMain extends ApplicationFrame{
     class loadViewPanel implements Visitor {
 
         public loadViewPanel() throws SQLException {
-            RMOS rmos = RMOS.get_instance();
-            rmos.loadGroups();
             rmos.makeAccept(this);
             loadButtons();
         }
@@ -404,40 +480,39 @@ public class RmosMain extends ApplicationFrame{
             getOuter().rcmButtons.add(new RCMButton(rcm));
         }
 
+        @Override
+        public void visit(RCMGroup rcmGroup) {
+
+        }
+
         public void loadButtons(){
             for (RCMButton rcmButton : rcmButtons) {
                 getOuter().viewFormPanel.add(rcmButton);
             }
         }
     }
-    //Pattern (Mediator may be) enhance
 
-    private void SubmitGroup(ActionEvent e)
-    {
+
+    private void SubmitGroup(ActionEvent e) throws SQLException {
         lblError.setVisible(true);
         if(txtGroupID.getText().length()<1)
         {
-
             lblError.setText("Please enter ID");
         }
         else if(txtGroupName.getText().length()<1)
         {
-
             lblError.setText("Please enter Name");
         }
         else
         {
-
-            boolean status=DBConn.instance().InsertGroups(txtGroupID.getText(),txtGroupName.getText());
-            loadGroup();
-
-                lblError.setText("Group created");
-
-
+            lblError.setText(rmos.createGroup(txtGroupID.getText(),txtGroupName.getText()));
+            //loadGroup();
+            groupIds.addItem(txtGroupID.getText().toString());
+            comboBoxGroup.addItem(txtGroupID.getText().toString());
+            groupComboBox.addItem(txtGroupID.getText().toString());
         }
     }
-    private void SubmitRCM(ActionEvent e)
-    {
+    private void SubmitRCM(ActionEvent e) throws SQLException {
         lblError.setVisible(true);
         if(rcmId.getText().length()<1)
         {
@@ -459,7 +534,26 @@ public class RmosMain extends ApplicationFrame{
         {
             //Builder pattern applied
             //boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
-            DBConn.instance().InsertRCM(new RCMCreate.RCMCreateBuilder().withGroupId(groupIds.getSelectedItem().toString()).withRCMId(rcmId.getText()).withCapacity(Double.parseDouble(rcmCapacity.getText())).withCapacityLeft(Double.parseDouble(rcmCapacity.getText())).withMoney(Double.parseDouble(money.getText())).withLocation(rcmLocation.getText()).withOpStatus("inactive").build());
+            rmos.createRCM(rcmId.getText(), rcmLocation.getText(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), groupIds.getSelectedItem().toString());
+            //DBConn.instance().InsertRCM(new RCMCreate.RCMCreateBuilder().withGroupId(groupIds.getSelectedItem().toString()).withRCMId(rcmId.getText()).withCapacity(Double.parseDouble(rcmCapacity.getText())).withCapacityLeft(Double.parseDouble(rcmCapacity.getText())).withMoney(Double.parseDouble(money.getText())).withLocation(rcmLocation.getText()).withOpStatus("inactive").build());
+            DBConn.instance().InsertRCM( new RCM.RCMBuilder().withRCMId(rcmId.getText())
+                    .withGroupId(groupIds.getSelectedItem().toString())
+                    .withLocation(rcmLocation.getText())
+                    .withOpStatus(Status.valueOf("INACTIVE"))
+                    .withCapacity(Double.parseDouble(rcmCapacity.getText()))
+                    .withCapacityLeft(Double.parseDouble(rcmCapacity.getText()))
+                    .withMoney(Double.parseDouble(money.getText()))
+                    .build());
+
+            rmos.getGroupMap().get(groupIds.getSelectedItem().toString()).getRcmMap().put(rcmId.getText(),
+                                    new RCM.RCMBuilder().withRCMId(rcmId.getText())
+                .withGroupId(groupIds.getSelectedItem().toString())
+                .withLocation(rcmLocation.getText())
+                .withOpStatus(Status.valueOf("INACTIVE"))
+                .withCapacity(Double.parseDouble(rcmCapacity.getText()))
+                .withCapacityLeft(Double.parseDouble(rcmCapacity.getText()))
+                .withMoney(Double.parseDouble(money.getText()))
+                .build());
             lblError.setText("RCM created");
 
         }
@@ -468,7 +562,7 @@ public class RmosMain extends ApplicationFrame{
     private void loadGroup()
     {
         try {
-            ResultSet result = DBConn.instance().GetGroups();
+            //ResultSet result = DBConn.instance().GetGroups();
             groupIds.removeAllItems();
             comboBoxGroup.removeAllItems();
             groupComboBox.removeAllItems();
@@ -477,12 +571,17 @@ public class RmosMain extends ApplicationFrame{
             comboBoxGroup.addItem("--Select--");
 
             groupComboBox.addItem("--Select--");
-            while (result.next())
+            //while (result.next())
+            for (String rcmGroup : rmos.getGroupMap().keySet())
             {
 
-                groupIds.addItem(result.getString("groupId"));
-                comboBoxGroup.addItem(result.getString("groupId"));
-                groupComboBox.addItem(result.getString("groupId"));
+                //groupIds.addItem(result.getString("groupId"));
+                //comboBoxGroup.addItem(result.getString("groupId"));
+                //groupComboBox.addItem(result.getString("groupId"));
+
+                groupIds.addItem(rcmGroup);
+                comboBoxGroup.addItem(rcmGroup);
+                groupComboBox.addItem(rcmGroup);
             }
         }
         catch(Exception e)

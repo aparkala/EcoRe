@@ -13,7 +13,7 @@ import java.util.List;
  * TODO : Builder or Prototype Pattern
  */
 
-public class RCM implements Visitable {
+public class RCM implements VisitableComponent {
     private String rcmId;
     private String groupId;
     private String location;
@@ -25,11 +25,6 @@ public class RCM implements Visitable {
     private HashMap<String,Item> itemMap;
     private List<HashMap<Item,Double>> insertedItems;
     private DBConn db = DBConn.instance();
-
-    @Override
-    public void accept(RcmCounter counter) {
-        counter.visit(this);
-    }
 
     @Override
     public void accept(RmosMain.loadViewPanel buttonLoader) {
@@ -94,7 +89,11 @@ public class RCM implements Visitable {
 
     void init() throws SQLException {
         ResultSet resultSet = db.GetRCMItems(this.rcmId);
-        while(resultSet.next()) {
+
+        if(resultSet == null){
+            return;
+        }
+        while((resultSet != null) && (resultSet.next())) {
             itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getString("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
         }
     }
@@ -195,6 +194,14 @@ public class RCM implements Visitable {
     {
         this.capacityLeft=capacityAvailable;
     }
+    public String getGroupId()
+    {
+        return this.groupId=groupId;
+    }
+    public Status getOpStatus()
+    {
+        return this.opStatus=opStatus;
+    }
 
     @Override
     public String toString() {
@@ -263,10 +270,12 @@ public class RCM implements Visitable {
     //Other methods
     public void deactivate(){
         db.setStatusInactive(rcmId);
+        this.setStatus(Status.INACTIVE);
         //update transaction log ?
     }
     public void activate(){
         db.setStatusActive(rcmId);
+        this.setStatus(Status.ACTIVE);
         //update transaction log?
     }
     
@@ -276,6 +285,7 @@ public class RCM implements Visitable {
         Date date = new Date();
         lastEmptiedStr = dateFormat.format(date);
         db.setLastEmptied(rcmId, lastEmptiedStr);
+        this.setStatus(Status.FULL);
 
         //update transaction log
     }

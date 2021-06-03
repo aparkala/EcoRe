@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class MainMenu extends JFrame{
@@ -31,11 +30,14 @@ public class MainMenu extends JFrame{
 
     private MetricStrategy metricStrategy;
     private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
+    RMOS rmos;
+
 
     private String metric;
 
-    public MainMenu()
-    {
+    public MainMenu() throws SQLException {
+        rmos = RMOS.get_instance();
+        rmos.init();
         initComponents();
         LoadActiveRCM();
     }
@@ -78,7 +80,10 @@ public class MainMenu extends JFrame{
         lblMetric.setForeground(Color.black);
         lblMetric.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
-
+        lbsRadioButton.setForeground(Color.black);
+        lbsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        kgsRadioButton.getUI();
+        kgsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         lblError.setForeground(Color.white);
         lblError.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -98,12 +103,6 @@ public class MainMenu extends JFrame{
 
         ImageIcon icon = new ImageIcon("Images/ecore.png");
         lblImage.setIcon(icon);
-
-
-        lbsRadioButton.setForeground(Color.black);
-        lbsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
-        kgsRadioButton.getUI();
-        kgsRadioButton.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         buttonGroup=new ButtonGroup();
         buttonGroup.add(lbsRadioButton);
@@ -198,14 +197,6 @@ public class MainMenu extends JFrame{
                 groupID=group.getKey();
             }
         }
-       /* if(lbsRadioButton.isSelected())
-        {
-            metric="lbs";
-        }
-        else if(kgsRadioButton.isSelected())
-        {
-            metric="kgs";
-        }*/
         RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metricStrategy); //send this via class object
     }
     private void addValues(String key, String value) {
@@ -222,8 +213,7 @@ public class MainMenu extends JFrame{
         groupRCM.put(key,tempList);
     }
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws SQLException {
         MainMenu m=new MainMenu();
     }
 }

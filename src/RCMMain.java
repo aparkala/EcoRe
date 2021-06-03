@@ -32,7 +32,7 @@ public class RCMMain extends FocusAdapter {
     private JPanel errorPanel;
     private String rcmId;
     private String groupID;
-    private String metric="lbs";
+    private String metric;
     private double pricePerMetric;
     private double price;
     private double weight;
@@ -48,8 +48,12 @@ public class RCMMain extends FocusAdapter {
     List<Item> itemsList=new ArrayList<>();
     //private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
     //private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
+    private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
+    private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
     private JFrame frame;
     DecimalFormat df=new DecimalFormat("0.00");
+    RMOS rmos;
+    RCM rcm;
     private MetricStrategy metricStrategy;
 
 
@@ -60,8 +64,13 @@ public class RCMMain extends FocusAdapter {
         //this.metric=metric;
         this.metricStrategy=metricStrategy;
         initComponents();
-        LoadRCMItems(rcmId);
-        LoadCapacityMoney(rcmId);
+
+        rmos = RMOS.get_instance();
+        rcm = rmos.getRCM(groupID, rcmId);
+
+        //itemsList = (List<Item>) rcm.getAvailableItems().values();
+
+        LoadRCMItems();
         LoadTransactionId();
     }
     public void initComponents()
@@ -205,7 +214,7 @@ public class RCMMain extends FocusAdapter {
         {
             lblError.setText("Please enter weight");
         }
-        else if(Double.parseDouble(txtWeight.getText())>capacityLeft)
+        else if(Double.parseDouble(txtWeight.getText())>rcm.getCapacityLeft())
         {
             lblError.setText("Sorry!Machine is full. Cannot accept the item.");
 
@@ -216,7 +225,7 @@ public class RCMMain extends FocusAdapter {
             java.sql.Date insertedDate = new java.sql.Date(now.getTime());
 
             int itemId = 0;
-            for (Item item : itemsList) {
+            for (Item item : rcm.getAvailableItems().values()) {
                 if (txtItem.getText().equalsIgnoreCase(item.getItemName())) {
                     pricePerMetric = item.getPricePerMetric();
                     itemId = item.getItemID();
@@ -225,24 +234,11 @@ public class RCMMain extends FocusAdapter {
             weight = Double.parseDouble(txtWeight.getText());
             price = pricePerMetric * weight;
             finalPrice += price; //use for cash
-            capacityLeft -= weight;
+            rcm.setCapacityLeft(rcm.getCapacityLeft() - weight);
 
             DefaultTableModel insertedTableModel = (DefaultTableModel) (tableInserted.getModel());
             insertedTableModel.addRow(new String[]{txtItem.getText(), txtWeight.getText(), String.valueOf(price)});
-            //enhance
-            /*if(metric=="kgs")
-            {
-                try {
 
-                    String format = df.format(price / 0.45359237);
-                    price = (Double) df.parse(format);
-                }
-                catch (ParseException ex)
-                {
-                    System.out.println(ex);
-                }
-
-            }*/
             price= metricStrategy.PutMetricPrice(price); //strategy pattern
             rcmTransactions.add(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId).withRCMId(rcmId).withItemId(itemId).withItemPrice(price).withInsertedDate(insertedDate).withWeight(weight).withCash(1).withIsEmpty(0).withGroupId(groupID).build());
             submitButton.setEnabled(true);
@@ -250,37 +246,19 @@ public class RCMMain extends FocusAdapter {
             txtWeight.setText("");
         }
     }
-    private void LoadRCMItems(String rcmId)
+    private void LoadRCMItems()
     {
         try {
-            ResultSet result = DBConn.instance().GetRCMItems(rcmId);
-            while (result.next())
+
+            for(Item item:rcm.getAvailableItems().values())
             {
-               /* if(metric=="lbs")
-                {
-                    metricItemPrice=result.getDouble("itemPrice");
-                }
-                else if(metric=="kgs")
-                {
-                    try {
 
-
-                        String format = df.format(result.getDouble("itemPrice") * 0.45359237);
-                        metricItemPrice = (Double) df.parse(format);
-                    }
-                    catch (ParseException ex)
-                    {
-                        System.out.println(ex);
-                    }
-
-                }*/
-                metricItemPrice=metricStrategy.GetMetricPrice(result.getDouble("itemPrice")); //strategy pattern
-                Item item=new Item(result.getInt(1),result.getString(2),metricItemPrice);
                 itemsList.add(item);
-                DefaultTableModel rcmTableModel = (DefaultTableModel)(tableRCM.getModel());
-                // enhance the code here-design pattern
+                metricItemPrice=metricStrategy.GetMetricPrice(item.getPricePerMetric());
 
-                rcmTableModel.addRow(new String[]{result.getString("itemName"),String.valueOf(metricItemPrice)});
+                DefaultTableModel rcmTableModel = (DefaultTableModel)(tableRCM.getModel());
+
+                rcmTableModel.addRow(new String[]{item.getItemName(),String.valueOf(metricItemPrice)});
 
             }
         }
@@ -289,20 +267,7 @@ public class RCMMain extends FocusAdapter {
             System.out.println(e);
         }
     }
-    private void LoadCapacityMoney(String rcmId)
-    {
-        try {
-            ResultSet result = DBConn.instance().GetCapacityLeft(rcmId);
-            while (result.next()) {
-                capacityLeft=result.getDouble(1);
-                moneyLeft=result.getDouble(2);
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
+
     private void LoadTransactionId()
     {
         transactionId=DBConn.instance().GetMaxTransactionId();

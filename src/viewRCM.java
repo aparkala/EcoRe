@@ -1,17 +1,10 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
-
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ItemEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+
 
 public class viewRCM {
     private JPanel viewRcmPane;
@@ -39,28 +32,16 @@ public class viewRCM {
     private JLabel lblNewPrice;
     private JLabel lblRemoveSelectItem;
     RCM rcm;
-    DBConn db;
-    HashMap<String, String> allItems;
-    HashMap<String, Double> rcmItems;
+    RMOS rmos;
 
 
 
     public viewRCM(RCM rcm) throws Exception {
         this.rcm = rcm;
-        db = DBConn.instance();
+        rmos = RMOS.get_instance();
 
         initComponents();
     }
-
-    /*private viewRCM(String rcmId) throws Exception {
-        db = DBConn.instance();
-        loadRCM(rcmId);
-    }
-
-    private void loadRCM(String rcmId) throws Exception{
-        rcm = new RCM(rcmId);
-        System.out.println(rcm.toString());
-    }*/
 
     public void initComponents() throws Exception {
         JFrame frame = new JFrame();
@@ -137,12 +118,16 @@ public class viewRCM {
         emptyButton.setForeground(Color.black);
         emptyButton.setBounds(420, 365, 350, 90);
 
+        activateDeactivateButton.addActionListener(evt -> switchPower(evt));
+        emptyButton.addActionListener(evt -> emptyRCM(evt));
+        deleteButton.addActionListener(evt -> deleteRCM(evt));
+        addButton.addActionListener(evt -> addItem(evt));
+        modifyButton.addActionListener(evt -> modifyItem(evt));
+        removeButton.addActionListener(evt -> removeItem(evt));
 
 
        // frame.pack();
         loadStatusTable();
-        loadItems();
-        loadRcmItems();
         loadAddItems();
         loadModifyItems();
         loadRemoveItems();
@@ -151,7 +136,7 @@ public class viewRCM {
     }
 
     private void loadButtons(){
-        if ((rcm.getStatus() == Status.active) || (rcm.getStatus() == Status.full)){
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
             activateDeactivateButton.setText("DEACTIVATE");
         }
         else {
@@ -164,13 +149,8 @@ public class viewRCM {
         else {
             emptyButton.setVisible(false);
         }
+        loadStatusTable();
 
-        activateDeactivateButton.addActionListener(evt -> switchPower(evt));
-        emptyButton.addActionListener(evt -> emptyRCM(evt));
-        deleteButton.addActionListener(evt -> deleteRCM(evt));
-        addButton.addActionListener(evt -> addItem(evt));
-        modifyButton.addActionListener(evt -> modifyItem(evt));
-        removeButton.addActionListener(evt -> removeItem(evt));
     }
 
     private void deleteRCM(ActionEvent actionEvent){
@@ -188,16 +168,10 @@ public class viewRCM {
             itemToRemove = removeItemCB.getSelectedItem().toString();
         }
 
-        for (Map.Entry entry : allItems.entrySet()) {
-            if(entry.getValue().toString() == itemToRemove) {
-                itemId = entry.getKey().toString();
-                db.removeRcmItem(rcm.getRcmId(),itemId);
-                removeLbl.setText("Item successfully removed");
-                removeLbl.setVisible(true);
-                rcmItems.remove(itemId);
-                removeItemCB.setSelectedIndex(0);
-            }
-        }
+        removeLbl.setText(rmos.removeItemFromRCM(rcm, removeItemCB.getSelectedItem().toString()));
+        removeLbl.setVisible(true);
+        removeItemCB.setSelectedIndex(0);
+
         loadAddItems();
         loadModifyItems();
     }
@@ -214,8 +188,8 @@ public class viewRCM {
             itemToAdd = addItemCB.getSelectedItem().toString();
         }
 
-        if (newItemPrice.getText() == ""){
-            addLbl.setText("Please set a price for the selected item");
+        if ((newItemPrice.getText() == "") || (newItemPrice.getText().matches("[A-Za-z]"))){
+            addLbl.setText("Please set a valid price for the selected item");
             addLbl.setVisible(true);
             return;
         }
@@ -223,17 +197,11 @@ public class viewRCM {
             price = new Double(newItemPrice.getText());
         }
 
-        for (Map.Entry entry : allItems.entrySet()) {
-            if(entry.getValue().toString() == itemToAdd) {
-                itemId = entry.getKey().toString();
-                db.insertRcmItem(rcm.getRcmId(),itemId, price);
-                addLbl.setText("Item successfully added");
-                addLbl.setVisible(true);
-                rcmItems.put(itemId, price);
-                addItemCB.setSelectedIndex(0);
-                newItemPrice.setText("");
-            }
-        }
+        addLbl.setText(rmos.addItemToRCM(rcm, itemToAdd, price));
+        addLbl.setVisible(true);
+        addItemCB.setSelectedIndex(0);
+        newItemPrice.setText("");
+
         loadAddItems();
         loadModifyItems();
         loadRemoveItems();
@@ -252,24 +220,17 @@ public class viewRCM {
             itemToModify = modifyItemCB.getSelectedItem().toString();
         }
 
-        if (modifiedItemPrice.getText() == ""){
-            modifyLbl.setText("Please set a new price for the selected item");
+        if ((modifiedItemPrice.getText() == "") || (modifiedItemPrice.getText().matches("[A-Za-z]"))){
+            modifyLbl.setText("Please set a valid new price for the selected item");
             modifyLbl.setVisible(true);
             return;
         }
         else {
             newPrice = Double.parseDouble(modifiedItemPrice.getText());
-            for (Map.Entry entry : allItems.entrySet()) {
-                if(entry.getValue().toString() == itemToModify) {
-                    itemId = entry.getKey().toString();
-                    db.changeItemPrice(rcm.getRcmId(),itemId, newPrice);
-                    modifyLbl.setText("Price successfully changed");
-                    modifyLbl.setVisible(true);
-                    rcmItems.replace(itemId, newPrice);
-                    modifyItemCB.setSelectedIndex(0);
-                    modifiedItemPrice.setText("");
-                }
-            }
+            modifyLbl.setText(rmos.modifyItemOfRCM(rcm, itemToModify, newPrice));
+            modifyLbl.setVisible(true);
+            modifyItemCB.setSelectedIndex(0);
+            modifiedItemPrice.setText("");
         }
 
     }
@@ -302,28 +263,29 @@ public class viewRCM {
     }
 
     private void switchPower(ActionEvent e){
-        if ((rcm.getStatus() == Status.active || (rcm.getStatus() == Status.full))){
-            rcm.deactivate();
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
+            rmos.deactivate(rcm);
         }
         else {
-            rcm.activate();
+           rmos.activate(rcm);
         }
+        rcm.toString();
         loadButtons();
     }
 
     private void emptyRCM(ActionEvent e){
-        rcm.empty();
+        rmos.empty(rcm);
         this.loadStatusTable();
         emptyButton.setVisible(false);
     }
 
     private void loadAddItems() {
         addItemCB.removeAllItems();
-        ArrayList<String> rcmItemIds = new ArrayList<>(rcmItems.keySet());
-        ArrayList<String> allItemIds = new ArrayList<>(allItems.keySet());
+        ArrayList<String> rcmItemIds = new ArrayList<>(rcm.getAvailableItems().keySet());
+        ArrayList<String> allItemIds = new ArrayList<>(rmos.getItemMapToId().keySet());
 
-        System.out.println(allItemIds);
-        System.out.println(rcmItemIds);
+        //System.out.println(allItemIds);
+        //System.out.println(rcmItemIds);
 
         if (allItemIds.size() == rcmItemIds.size()){
             addItemCB.addItem(" -- RCM already services all available items -- ");
@@ -340,10 +302,10 @@ public class viewRCM {
         addItemCB.addItem(" -- Select Item -- ");
         for (String id : allItemIds) {
             if (!rcmItemIds.contains(id)) {
-                addItemCB.addItem(allItems.get(id));
+                addItemCB.addItem(rmos.getItemMapToId().get(id));
             }
         }
-        System.out.println(allItems);
+        //System.out.println(allItems);
 
     }
 
@@ -352,8 +314,8 @@ public class viewRCM {
         //System.out.println(rcmItems);
         //System.out.println(allItems);
         modifyItemCB.addItem(" -- Select Item --");
-        for (String id : rcmItems.keySet()) {
-            modifyItemCB.addItem(allItems.get(id));
+        for (String id : rcm.getAvailableItems().keySet()) {
+            modifyItemCB.addItem(rmos.getItemMapToId().get(id));
         }
 
         //modifyItemCB.addItemListener(evt -> addCbChanged(evt));
@@ -364,33 +326,15 @@ public class viewRCM {
         //System.out.println(rcmItems);
         //System.out.println(allItems);
         removeItemCB.addItem(" -- Select Item --");
-        for (String id : rcmItems.keySet()) {
-            removeItemCB.addItem(allItems.get(id));
+        for (String id : rcm.getAvailableItems().keySet()) {
+            removeItemCB.addItem(rmos.getItemMapToId().get(id));
         }
 
         //modifyItemCB.addItemListener(evt -> addCbChanged(evt));
     }
 
-
-    private void loadItems() throws SQLException {
-        allItems = new HashMap<>();
-        ResultSet items = db.getAllItems();
-        while (items.next()){
-            allItems.put(items.getString("itemid"), items.getString("itemname"));
-        }
-        System.out.println(allItems);
-    }
-
-    private void loadRcmItems() throws SQLException {
-        rcmItems = new HashMap<>();
-        ResultSet items = db.GetRCMItems(rcm.getRcmId());
-        while(items.next()) {
-            rcmItems.put(items.getString("itemid"), items.getDouble("itemprice"));
-        }
-    }
-
     public static void main(String args[]) throws Exception{
-        viewRCM v = new viewRCM(new RCM("RCM-1"));
+        //viewRCM v = new viewRCM("SCU-001");
     }
 
 }

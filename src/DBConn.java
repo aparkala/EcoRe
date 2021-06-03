@@ -3,9 +3,17 @@ import java.util.List;
 
 public class DBConn {
 
-    private DBConn(){};
+    private DBConn() throws SQLException {};
 
-    static private DBConn instance_  = new DBConn();
+    static private DBConn instance_;
+
+    static {
+        try {
+            instance_ = new DBConn();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 
     static public DBConn instance()
     {
@@ -19,7 +27,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
             String query = "INSERT INTO Groups_(groupId,groupName) VALUES (?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,groupId);
@@ -35,13 +42,12 @@ public class DBConn {
         }
     }
     //boolean InsertRCM(String rcmId,String groupId,double rcmCapacity,double money,String rcmLocation) {
-    boolean InsertRCM(RCMCreate rcmCreate) {
+    boolean InsertRCM(RCM rcmCreate) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "INSERT INTO RCM_(rcmId,groupId,rcmLocation,rcmCapacity,capacityLeft,money,opStatus) VALUES (?,?,?,?,?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmCreate.getRcmId());
@@ -49,8 +55,8 @@ public class DBConn {
             ps.setString(3,rcmCreate.getLocation());
             ps.setDouble(4,rcmCreate.getCapacity());
             ps.setDouble(5,rcmCreate.getCapacityLeft());
-            ps.setDouble(6,rcmCreate.getMoney());
-            ps.setString(7,rcmCreate.getOpStatus());
+            ps.setDouble(6,rcmCreate.getMoneyLeft());
+            ps.setString(7,rcmCreate.getStatus().toString());
 
             status=ps.execute();
             conn.close();
@@ -69,7 +75,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT * FROM Groups_";
             PreparedStatement ps = conn.prepareStatement(query);
             result=ps.executeQuery();
@@ -162,12 +167,33 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "INSERT INTO RCM_Items_(rcmId,itemId,itemPrice) VALUES (?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
             ps.setString(2,itemId);
             ps.setDouble(3,price);
+
+            status=ps.execute();
+            conn.close();
+            return status;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return status;
+        }
+    }
+
+    boolean insertItem(String itemId, String itemName) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "INSERT INTO Items_(itemId,itemName) VALUES (?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,itemId);
+            ps.setString(2,itemName);
 
             status=ps.execute();
             conn.close();
@@ -186,7 +212,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "UPDATE RCM_Items_ SET itemPrice=? WHERE rcmId=? AND itemId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setDouble(1,newPrice);
@@ -210,7 +235,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "DELETE FROM RCM_Items_ WHERE rcmId=? AND itemId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
@@ -231,7 +255,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT * from Groups_";
             PreparedStatement ps = conn.prepareStatement(query);
             result=ps.executeQuery();
@@ -253,7 +276,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT RCM_Items_.itemId,Items_.itemName,RCM_Items_.itemPrice FROM RCM_Items_ inner join Items_ on RCM_Items_.itemId=Items_.itemId where RCM_Items_.rcmId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
@@ -276,7 +298,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT * from RCM_ where groupId=?";
 
             PreparedStatement ps = conn.prepareStatement(query);
@@ -300,7 +321,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT * from Items_";
             PreparedStatement ps = conn.prepareStatement(query);
 
@@ -322,7 +342,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "SELECT capacityLeft,money FROM RCM_ where rcmId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
@@ -345,7 +364,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt = conn.createStatement();
             String query = "select max(transactionId) from transactions_";
             PreparedStatement ps = conn.prepareStatement(query);
 
@@ -370,7 +388,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
             for(RCMTransaction transaction:rcmTransactions) {
                 String query = "INSERT INTO Transactions_(transactionId,rcmId,itemId,weight,price,insertedDate,cash,isEmpty,groupId) VALUES (?,?,?,?,?,?,?,?,?)";
                 PreparedStatement ps = conn.prepareStatement(query);
@@ -403,7 +420,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
 
             String query = "UPDATE RCM_ set capacityLeft = ?, money = ? where rcmId=?";
 
@@ -428,7 +444,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
 
             String query = "select groupId,rcmId from RCM_ where opStatus='active'";
 
@@ -452,7 +467,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
 
             String query = "select count(*) from Transactions_ where rcmId=? AND to_char(inserteddate,'fmMonth')=? AND to_char(inserteddate,'YYYY')=?";
 
@@ -482,7 +496,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
 
             String query = "SELECT a.rcmId,RCM_.rcmLocation FROM (SELECT rcmId,transactionid,COUNT(rcmId) rcmCount FROM Transactions_ where insertedDate > trunc(sysdate-?) GROUP BY rcmId,transactionid ORDER BY transactionid DESC ) a inner join RCM_ on a.rcmId=RCM_.rcmId WHERE  ROWNUM <= 1";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -507,7 +520,6 @@ public class DBConn {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            Statement stmt=conn.createStatement();
 
             String query = "SELECT rcmId,sum(weight),sum(price) FROM  Transactions_ where to_char(inserteddate,'DD/MM/YYYY') between to_char(?,'DD/MM/YYYY') and to_char(?,'DD/MM/YYYY')  and  groupId=? and isEmpty=0 GROUP BY rcmId";
             PreparedStatement ps = conn.prepareStatement(query);
@@ -534,7 +546,6 @@ public class DBConn {
                 Class.forName("oracle.jdbc.driver.OracleDriver");
                 Connection conn = DriverManager.getConnection(
                         "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-                Statement stmt = conn.createStatement();
 
                 String query = "SELECT rcmId,count(*) FROM  Transactions_ where to_char(inserteddate,'DD/MM/YYYY') between to_char(?,'DD/MM/YYYY') and to_char(?,'DD/MM/YYYY')  and  rcmID=? and isEmpty=1 GROUP BY rcmId";
                 PreparedStatement ps = conn.prepareStatement(query);
