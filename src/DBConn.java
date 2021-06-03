@@ -20,6 +20,33 @@ public class DBConn {
         return instance_; //return Single instance
     }
 
+    public boolean insertRCM(RCM rcm) {
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "INSERT INTO RCM_(rcmId,groupId,rcmLocation,rcmCapacity,capacityLeft,money,opStatus) VALUES (?,?,?,?,?,?,?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,rcm.getRcmId());
+            ps.setString(2,rcm.getGroupId());
+            ps.setString(3,rcm.getLocation());
+            ps.setDouble(4,rcm.getCapacity());
+            ps.setDouble(5,rcm.getCapacityLeft());
+            ps.setDouble(6,rcm.getMoneyLeft());
+            ps.setString(7,rcm.getStatus().toString());
+
+            status=ps.execute();
+            conn.close();
+            return status;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return status;
+        }
+    }
+
 
     boolean InsertGroups(String groupId,String groupName) {
         boolean status=false;
@@ -147,21 +174,120 @@ public class DBConn {
 
     public void setStatusActive(String rcmID){
         // change rcm status to ACTIVE
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,"ACTIVE");
+            ps.setString(2,rcmID);
+
+            status=ps.execute();
+            conn.close();
+            return;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return;
+        }
+
     }
 
     public void setStatusInactive(String rcmID){
         // change rcm status to INACTIVE
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,"INACTIVE");
+            ps.setString(2,rcmID);
+
+            status=ps.execute();
+            conn.close();
+            return;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return;
+        }
     }
 
     public void setStatusFull(String rcmId){
         // change rcm status to FULL
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1,"FULL");
+            ps.setString(2,rcmId);
+
+            status=ps.execute();
+            conn.close();
+            return;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return;
+        }
     }
 
-    public void setLastEmptied(String rcmId, String lastEmptied){
+    public void setLastEmptied(String rcmId, java.sql.Date lastEmptied){
         // change rcm last emptied
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "UPDATE RCM_ SET lastEmptied=? WHERE rcmID=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDate(1,lastEmptied);
+            ps.setString(2,rcmId);
+
+            status=ps.execute();
+            conn.close();
+            return;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return;
+        }
     }
 
-    boolean insertRcmItem(String rcmId, String itemId, Double price) {
+    void setCapacityLeft(String rcmID, double capacityLeft){
+        boolean status=false;
+        try {
+            Class.forName("oracle.jdbc.driver.OracleDriver");
+            Connection conn = DriverManager.getConnection(
+                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
+            String query = "UPDATE RCM_ SET capacityLeft=? WHERE rcmID=?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setDouble(1,capacityLeft);
+            ps.setString(2,rcmID);
+
+            status=ps.execute();
+            conn.close();
+            return;
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+            return;
+        }
+    }
+
+    boolean insertRcmItem(String rcmId, Integer itemId, Double price) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -170,7 +296,7 @@ public class DBConn {
             String query = "INSERT INTO RCM_Items_(rcmId,itemId,itemPrice) VALUES (?,?,?)";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
-            ps.setString(2,itemId);
+            ps.setInt(2,itemId);
             ps.setDouble(3,price);
 
             status=ps.execute();
@@ -184,16 +310,15 @@ public class DBConn {
         }
     }
 
-    boolean insertItem(String itemId, String itemName) {
+    boolean insertItem(String itemName) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            String query = "INSERT INTO Items_(itemId,itemName) VALUES (?,?)";
+            String query = "INSERT INTO Items_(itemName) VALUES (?)";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,itemId);
-            ps.setString(2,itemName);
+            ps.setString(1,itemName);
 
             status=ps.execute();
             conn.close();
@@ -206,7 +331,7 @@ public class DBConn {
         }
     }
 
-    boolean changeItemPrice(String rcmId, String itemId, Double newPrice) {
+    boolean changeItemPrice(String rcmId, Integer itemId, Double newPrice) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -216,7 +341,7 @@ public class DBConn {
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setDouble(1,newPrice);
             ps.setString(2,rcmId);
-            ps.setString(3,itemId);
+            ps.setInt(3,itemId);
 
             status=ps.execute();
             conn.close();
@@ -229,7 +354,7 @@ public class DBConn {
         }
     }
 
-    void removeRcmItem(String rcmId, String itemId) {
+    void removeRcmItem(String rcmId, Integer itemId) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -238,7 +363,7 @@ public class DBConn {
             String query = "DELETE FROM RCM_Items_ WHERE rcmId=? AND itemId=?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setString(1,rcmId);
-            ps.setString(2,itemId);
+            ps.setInt(2,itemId);
 
             status=ps.execute();
             conn.close();
@@ -445,7 +570,7 @@ public class DBConn {
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
 
-            String query = "select groupId,rcmId from RCM_ where opStatus='active'";
+            String query = "select groupId,rcmId from RCM_ where opStatus='ACTIVE'";
 
             PreparedStatement ps = conn.prepareStatement(query);
 

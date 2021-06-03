@@ -3,19 +3,24 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MainMenu extends JFrame{
+public class MainMenu extends FocusAdapter{
     private JPanel panel1;
     private JTabbedPane tabbedPane1;
     private JLabel lblImage;
     private JComboBox comboBoxRCM;
+    private JRadioButton lbsRadioButton;
+    private JRadioButton kgsRadioButton;
     private JButton buttonSubmit;
     private JTextField txtUsername;
     private JPasswordField passwordField;
@@ -25,8 +30,7 @@ public class MainMenu extends JFrame{
     private JLabel lblPassword;
     private JLabel lblMetric;
     private ButtonGroup buttonGroup;
-    private JRadioButton lbsRadioButton;
-    private JRadioButton kgsRadioButton;
+
 
     private MetricStrategy metricStrategy;
     private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
@@ -36,15 +40,25 @@ public class MainMenu extends JFrame{
     private String metric;
 
     public MainMenu() throws SQLException {
+        Printer.print("In Main Menu Constructor");
         rmos = RMOS.get_instance();
         rmos.init();
+        Printer.print("Created and Initialized RMOS");
         initComponents();
+        Printer.print("Loaded Components");
+        LoadActiveRCM();
+        Printer.print("Loaded Active Components");
+    }
+
+    public void focusGained(FocusEvent e) {
         LoadActiveRCM();
     }
     public void initComponents() {
 
         JFrame frame = new JFrame("ECORE");
         frame.setContentPane(panel1);
+
+        comboBoxRCM.addFocusListener(this);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 800, 500);
@@ -156,6 +170,7 @@ public class MainMenu extends JFrame{
         else if (txtUsername.getText().equalsIgnoreCase("admin") && String.copyValueOf(passwordField.getPassword()).equals("admin123"))
         {
             lblError.setText("Login Successful");
+            Printer.print("Creating RMOSMain");
             RmosMain rmosMain=new RmosMain();
 
 
@@ -173,6 +188,10 @@ public class MainMenu extends JFrame{
         try {
             ResultSet result = DBConn.instance().GetActiveRCM();
             comboBoxRCM.removeAllItems();
+
+            if (result == null) {
+                comboBoxRCM.addItem("--- Sorry, All RCMs are currently under maintenance ---");
+            }
             comboBoxRCM.addItem(" -- Select Item --");
             while (result.next()) {
                // groupRCM.put(result.getString(1),result.getString(2)); //bug-not working']
@@ -214,6 +233,8 @@ public class MainMenu extends JFrame{
     }
 
     public static void main(String[] args) throws SQLException {
+        Printer.print("In Main Menu, Main Method");
+        Printer.printLn();
         MainMenu m=new MainMenu();
     }
 }

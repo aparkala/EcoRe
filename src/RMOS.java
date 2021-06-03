@@ -7,19 +7,19 @@ import java.util.*;
  **/
 
 public class RMOS {
+    DBConn db = DBConn.instance();
     private static final RMOS singleton = new RMOS();
     private HashMap<String,RCMGroup> groupMap = new HashMap<>();
-    DBConn db = DBConn.instance();
-    int numberOfRCMs;
-    private HashMap<String, String> itemMapToId = new HashMap<>();
-    private HashMap<String, String> itemMapToName = new HashMap<>();
+
+    private HashMap<Integer, String> itemMapToId = new HashMap<>();
+    private HashMap<String, Integer> itemMapToName = new HashMap<>();
     private HashMap<String, String> groupMapToId = new HashMap<>();
     private HashMap<String, String> groupMapToName = new HashMap<>();
 
     private RMOS(){}
 
     public HashMap<String, RCMGroup> getGroupMap() { return this.groupMap; }
-    public HashMap<String, String> getItemMapToId() { return this.itemMapToId; }
+    public HashMap<Integer, String> getItemMapToId() { return this.itemMapToId; }
 
     public static RMOS get_instance(){
         return singleton;
@@ -36,29 +36,30 @@ public class RMOS {
 
         ResultSet resultSet = db.getAllItems();
         while(resultSet.next()){
-            this.itemMapToId.put(resultSet.getString("itemId"), resultSet.getString("itemName"));
-            this.itemMapToName.put(resultSet.getString("itemName"), resultSet.getString("itemId"));
+            this.itemMapToId.put(resultSet.getInt("itemId"), resultSet.getString("itemName"));
+            this.itemMapToName.put(resultSet.getString("itemName"), resultSet.getInt("itemId"));
         }
+        System.out.println(itemMapToId);
+        System.out.println(itemMapToName);
     }
 
-    void makeAccept(RmosMain.loadViewPanel loadViewPanel){
-        for (RCMGroup rcmGroup : groupMap.values()) {
-            rcmGroup.print();
-            rcmGroup.accept(loadViewPanel);
-        }
+
+    //RCM Hook Methods
+    RCM getRCM(String groupId, String rcmID){
+        return groupMap.get(groupId).getRcmMap().get(rcmID);
     }
 
     String createItem(String itemId, String itemName){
-        if (itemMapToId.containsKey(itemId.toLowerCase())) {
+        if (itemMapToId.containsKey(Integer.parseInt(itemId))) {
             return "Item already exists with name '" + itemMapToId.get(itemId) + "' in the database";
         }
         else if (itemMapToName.containsKey(itemName.toLowerCase())) {
             return "Item already exists with ID '" + itemMapToName.get(itemName) + "' in the database";
         }
         else {
-            itemMapToName.put(itemName.toLowerCase(), itemId.toLowerCase());
-            itemMapToName.put(itemId.toLowerCase(), itemName.toLowerCase());
-            db.insertItem(itemId.toLowerCase(), itemName.toLowerCase());
+            itemMapToName.put(itemName.toLowerCase(), Integer.parseInt(itemId));
+            itemMapToId.put(Integer.parseInt(itemId), itemName.toLowerCase());
+            db.insertItem(itemName.toLowerCase());
             return "Item successfully created";
         }
     }
@@ -74,11 +75,33 @@ public class RMOS {
         }
     }
 
-    String createRCM(String id, String location, double capacity, double money, String groupId) {
+    String createRCM(String rcmId, String location, double capacity, double money, String groupId) throws SQLException {
         //Composite needs to be figured out
 
-        return "";
+        RCM rcm = new RCM.RCMBuilder().withRCMId(rcmId)
+                .withGroupId(groupId)
+                .withLocation(location)
+                .withOpStatus(Status.valueOf("INACTIVE"))
+                .withCapacity(capacity)
+                .withCapacityLeft(capacity)
+                .withMoney(money)
+                .build();
+
+        groupMap.get(groupId).getRcmMap().put(rcmId, rcm);
+
+        db.insertRCM(rcm);
+
+        return "RCM Successfully Created";
     }
+
+    void makeAccept(RmosMain.loadViewPanel loadViewPanel){
+        for (RCMGroup rcmGroup : groupMap.values()) {
+            rcmGroup.print();
+            rcmGroup.accept(loadViewPanel);
+        }
+    }
+
+
 
     String removeItemFromRCM(RCM rcm, String itemName){
         db.removeRcmItem(rcm.getRcmId(),itemMapToName.get(itemName));
@@ -88,33 +111,26 @@ public class RMOS {
 
     String addItemToRCM(RCM rcm, String itemName, double itemPrice){
         db.insertRcmItem(rcm.getRcmId(),itemMapToName.get(itemName.toLowerCase()), itemPrice);
-        rcm.getAvailableItems().put(itemMapToName.get(itemName), new Item(itemMapToName.get(itemName), itemName.toLowerCase(), itemPrice));
+        rcm.getAvailableItems().put(itemName.toLowerCase(), new Item(itemMapToName.get(itemName), itemName.toLowerCase(), itemPrice));
         return "Item successfully added";
     }
 
     String modifyItemOfRCM(RCM rcm, String itemName, double newItemPrice){
         db.changeItemPrice(rcm.getRcmId(),itemMapToName.get(itemName), newItemPrice);
-        rcm.getAvailableItems().replace(itemMapToName.get(itemName), new Item(itemMapToName.get(itemName), itemName, newItemPrice));
+        rcm.getAvailableItems().replace(itemName.toLowerCase(), new Item(itemMapToName.get(itemName), itemName, newItemPrice));
         return "Item successfully added";
-    }
-
-    RCM getRCM(String groupId, String rcmID){
-        return groupMap.get(groupId).getRcmMap().get(rcmID);
     }
 
     public void deactivate(RCM rcm){
         rcm.deactivate();
-        //insert transaction
     }
 
     public void activate(RCM rcm){
         rcm.activate();
-        //insert transaction
     }
 
     public void empty(RCM rcm){
         rcm.empty();
-        //insert transaction?
 
     }
     public static void main(String args[]) throws SQLException {
@@ -123,6 +139,8 @@ public class RMOS {
     }
 
 
-
+    public HashMap<String, Integer> getItemMapToName() {
+        return this.itemMapToName;
+    }
 }
 
