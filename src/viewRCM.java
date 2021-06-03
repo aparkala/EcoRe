@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 
-public class viewRCM {
+public class viewRCM extends FocusAdapter{
     private JPanel viewRcmPane;
     private JButton activateDeactivateButton;
     private JTable statusTable;
@@ -132,6 +135,8 @@ public class viewRCM {
         modifyButton.addActionListener(evt -> modifyItem(evt));
         removeButton.addActionListener(evt -> removeItem(evt));
 
+        addItemCB.addFocusListener(this);
+
 
        // frame.pack();
         loadStatusTable();
@@ -140,6 +145,10 @@ public class viewRCM {
         loadRemoveItems();
         loadButtons();
         frame.setVisible(true);
+    }
+
+    public void focusGained(FocusEvent evt) {
+        loadAddItems();
     }
 
     private void loadButtons(){
@@ -161,7 +170,7 @@ public class viewRCM {
     }
 
     private void deleteRCM(ActionEvent actionEvent){
-
+        //delete
     }
 
     void removeItem(ActionEvent actionEvent){
@@ -175,7 +184,7 @@ public class viewRCM {
             itemToRemove = removeItemCB.getSelectedItem().toString();
         }
 
-        removeLbl.setText(rmos.removeItemFromRCM(rcm, removeItemCB.getSelectedItem().toString()));
+        removeLbl.setText(rmos.removeItemFromRCM(rcm, itemToRemove));
         removeLbl.setVisible(true);
         removeItemCB.setSelectedIndex(0);
 
@@ -288,13 +297,15 @@ public class viewRCM {
 
     private void loadAddItems() {
         addItemCB.removeAllItems();
-        ArrayList<String> rcmItemIds = new ArrayList<>(rcm.getAvailableItems().keySet());
-        ArrayList<String> allItemIds = new ArrayList<>(rmos.getItemMapToId().keySet());
+        ArrayList<String> rcmItems = new ArrayList<>(rcm.getAvailableItems().keySet());
+        ArrayList<String> allItems = new ArrayList<>(rmos.getItemMapToName().keySet());
+        System.out.println(rcmItems);
+        System.out.println(allItems);
 
         //System.out.println(allItemIds);
         //System.out.println(rcmItemIds);
 
-        if (allItemIds.size() == rcmItemIds.size()){
+        if (allItems.size() == rcmItems.size()){
             addItemCB.addItem(" -- RCM already services all available items -- ");
             addButton.setEnabled(false);
             return;
@@ -302,14 +313,14 @@ public class viewRCM {
 
         addButton.setEnabled(true);
 
-        allItemIds.removeAll(rcmItemIds);
+        allItems.removeAll(rcmItems);
         //System.out.println(allItemIds);
         //System.out.println(rcmItemIds);
 
         addItemCB.addItem(" -- Select Item -- ");
-        for (String id : allItemIds) {
-            if (!rcmItemIds.contains(id)) {
-                addItemCB.addItem(rmos.getItemMapToId().get(id));
+        for (String name : allItems) {
+            if (!rcmItems.contains(name)) {
+                addItemCB.addItem(name);
             }
         }
         //System.out.println(allItems);
@@ -321,8 +332,8 @@ public class viewRCM {
         //System.out.println(rcmItems);
         //System.out.println(allItems);
         modifyItemCB.addItem(" -- Select Item --");
-        for (String id : rcm.getAvailableItems().keySet()) {
-            modifyItemCB.addItem(rmos.getItemMapToId().get(id));
+        for (String name : rcm.getAvailableItems().keySet()) {
+            modifyItemCB.addItem(name);
         }
 
         //modifyItemCB.addItemListener(evt -> addCbChanged(evt));
@@ -333,8 +344,8 @@ public class viewRCM {
         //System.out.println(rcmItems);
         //System.out.println(allItems);
         removeItemCB.addItem(" -- Select Item --");
-        for (String id : rcm.getAvailableItems().keySet()) {
-            removeItemCB.addItem(rmos.getItemMapToId().get(id));
+        for (String name : rcm.getAvailableItems().keySet()) {
+            removeItemCB.addItem(name);
         }
 
         //modifyItemCB.addItemListener(evt -> addCbChanged(evt));

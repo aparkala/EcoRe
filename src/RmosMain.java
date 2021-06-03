@@ -111,18 +111,339 @@ public class RmosMain extends ApplicationFrame{
 
     public RmosMain() throws SQLException{
         super( "applicationTitle" );
-
+        Printer.printLn();
+        Printer.print("In RMOSMain Constructor");
         rmos = RMOS.get_instance();
-        rmos.init();
         initComponents();
     }
+
+
+    private RmosMain getOuter() {
+        return this;
+    }
+
+    private void SubmitItem(ActionEvent e) throws SQLException {
+        lblError.setVisible(true);
+        if(newItemName.getText().length()<1)
+        {
+            lblError.setText("Please enter new item name");
+        }
+        else if (newItemId.getText().length()<1)
+        {
+            lblError.setText("Please enter new item ID");
+        }
+        else
+        {
+            lblError.setText(rmos.createItem(newItemId.getText(),newItemName.getText()));
+            //loadGroup();
+        }
+    }
+
+    //Visitor inner class
+
+    class loadViewPanel implements Visitor {
+
+        public loadViewPanel() throws SQLException {
+            rcmButtons = new ArrayList<>();
+            rmos.makeAccept(this);
+            loadButtons();
+        }
+
+        @Override
+        public void visit(RCM rcm) {
+            getOuter().rcmButtons.add(new RCMButton(rcm));
+        }
+
+        @Override
+        public void visit(RCMGroup rcmGroup) {
+
+        }
+
+        public void loadButtons(){
+            for (RCMButton rcmButton : rcmButtons) {
+                getOuter().viewFormPanel.add(rcmButton);
+            }
+        }
+    }
+    //Pattern (Mediator may be) enhance
+
+    private void SubmitGroup(ActionEvent e) throws SQLException {
+        lblError.setVisible(true);
+        if(txtGroupID.getText().length()<1)
+        {
+            lblError.setText("Please enter ID");
+        }
+        else if(txtGroupName.getText().length()<1)
+        {
+            lblError.setText("Please enter Name");
+        }
+        else
+        {
+            lblError.setText(rmos.createGroup(txtGroupID.getText(),txtGroupName.getText()));
+            groupIds.addItem(txtGroupID.getText());
+            comboBoxGroup.addItem(txtGroupID.getText());
+            groupComboBox.addItem(txtGroupID.getText());
+            //loadGroup();
+        }
+    }
+    private void SubmitRCM(ActionEvent e) throws SQLException {
+        lblError.setVisible(true);
+        if(rcmId.getText().length()<1)
+        {
+            lblError.setText("Please enter ID");
+        }
+        else if(rcmCapacity.getText().length()<1)
+        {
+            lblError.setText("Please enter capacity");
+        }
+        else if(money.getText().length()<1)
+        {
+            lblError.setText("Please enter money");
+        }
+        else if(rcmLocation.getText().length()<1)
+        {
+            lblError.setText("Please enter location");
+        }
+        else
+        {
+            //Builder pattern applied
+            //boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
+            String status = rmos.createRCM(rcmId.getText(), rcmLocation.getText(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), groupIds.getSelectedItem().toString());
+
+            new loadViewPanel();
+            lblError.setText(status);
+
+        }
+
+    }
+    private void loadGroup()
+    {
+        Printer.print("In Load Group");
+        try {
+            //ResultSet result = DBConn.instance().GetGroups();
+            groupIds.removeAllItems();
+            comboBoxGroup.removeAllItems();
+            groupComboBox.removeAllItems();
+
+            groupIds.addItem("--Select--");
+            comboBoxGroup.addItem("--Select--");
+
+            groupComboBox.addItem("--Select--");
+            //while (result.next())
+            for (String rcmGroup : rmos.getGroupMap().keySet())
+            {
+
+                //groupIds.addItem(result.getString("groupId"));
+                //comboBoxGroup.addItem(result.getString("groupId"));
+                //groupComboBox.addItem(result.getString("groupId"));
+
+                groupIds.addItem(rcmGroup);
+                comboBoxGroup.addItem(rcmGroup);
+                groupComboBox.addItem(rcmGroup);
+                Printer.print(rcmGroup);
+
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    //apply pattern
+    private void LoadRCM(String groupId)
+    {
+        try {
+            ResultSet result = DBConn.instance().GetRCM(groupId);
+
+
+            comboBoxRCM.removeAllItems();
+            RCMComboBox.removeAllItems();
+            comboBoxRCM.addItem("--Select--");
+            RCMComboBox.addItem("--Select--");
+            //while (result.next())
+            for(RCM rcm : rmos.getGroupMap().get(groupId).getRcmMap().values())
+            {
+
+                comboBoxRCM.addItem(rcm.getRcmId());
+                RCMComboBox.addItem(rcm.getRcmId());
+
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    private void SelectRCM(ActionEvent evt)
+    {
+        /*if (comboBoxGroup.getSelectedItem().toString() == "--Select--") {
+            lblError.setText("Please select a group");
+            lblError.setVisible(true);
+        }*/
+        if (comboBoxGroup.getSelectedItem().toString() != "--Select--"){
+            LoadRCM(comboBoxGroup.getSelectedItem().toString());
+        }
+
+    }
+    private void SelectRCMStats(ActionEvent evt)
+    { if (groupComboBox.getSelectedItem().toString() != "--Select--"){
+        LoadRCM(groupComboBox.getSelectedItem().toString());}
+    }
+    private void LoadMonth()
+    {
+        comboBoxMonth.removeAllItems();
+        comboBoxMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Month--", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));
+
+    }
+    private void LoadYear()
+    {
+        comboBoxYear.removeAllItems();
+
+        comboBoxYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Year--"}));
+        for (int year = 2015; year <= Calendar.getInstance().get(Calendar.YEAR); year++) {
+            comboBoxYear.addItem(year + "");
+        }
+    }
+    private void SubmitTotalItems(ActionEvent evt)
+    {
+       /* if(comboBoxYear.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select group.");
+        }
+        else if(comboBoxRCM.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select RCM.");
+        }
+        else if(comboBoxMonth.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select month.");
+        }
+        else if(comboBoxYear.getSelectedIndex()==0)
+        {
+            lblMessage.setText("Please select year.");
+        }
+        else {*/
+            int count = DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(), comboBoxMonth.getSelectedItem().toString(), comboBoxYear.getSelectedItem().toString());
+            lblMessage.setText("The total number of recycled items for the month " + comboBoxMonth.getSelectedItem().toString() + " is " + count);
+        //}
+    }
+    private void SubmitFrequentlyUsed(ActionEvent evt)
+    {
+        try {
+            ResultSet resultSet = DBConn.instance().GetMostFrequentlyUsedRCM(Integer.parseInt(txtNoOfDays.getText()));
+            while (resultSet.next()) {
+                lblFrequentlyUsed.setText("The most frequently used RCM is "+resultSet.getString(1)+" located at "+resultSet.getString(2));
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    private void SubmitWeightValue(ActionEvent evt)
+    {
+        try {
+
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date dateFrom = dateFormat.parse(txtFromDate.getText());
+            Date dateTo=dateFormat.parse(txtToDate.getText());
+            ResultSet resultSet=null;
+            DefaultCategoryDataset dataset =new DefaultCategoryDataset( );
+            if(emptyTimesRadioButton.isSelected()) {
+                resultSet = DBConn.instance().GetEmptyItemsByRCM(new java.sql.Date(dateFrom.getTime()), new java.sql.Date(dateTo.getTime()), RCMComboBox.getSelectedItem().toString());
+            }
+            else {
+                resultSet = DBConn.instance().GetWeightValueByRCM(new java.sql.Date(dateFrom.getTime()), new java.sql.Date(dateTo.getTime()), groupComboBox.getSelectedItem().toString());
+            }
+
+            if(weightRadioButton.isSelected()) {
+                while (resultSet.next()) {
+                    DefaultTableModel weightTableModel = (DefaultTableModel) (tableWeightValue.getModel());
+                    weightTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
+                    dataset.addValue(resultSet.getDouble(2), "RCM", resultSet.getString(1));
+                }
+                BarChart_AWT("Weight Stats", dataset);
+            }
+            else if(valueRadioButton.isSelected())
+            {
+                while (resultSet.next()) {
+                    DefaultTableModel valueTableModel = (DefaultTableModel) (tableWeightValue.getModel());
+                    valueTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(3)});
+                    dataset.addValue(resultSet.getDouble(3), "RCM", resultSet.getString(1));
+                }
+                BarChart_AWT("Value Stats", dataset);
+
+            }
+            else if(emptyTimesRadioButton.isSelected())
+            {
+
+                while (resultSet.next()) {
+                    DefaultTableModel emptyTableModel = (DefaultTableModel) (tableWeightValue.getModel());
+                    emptyTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
+                    dataset.addValue(resultSet.getInt(2), "RCM", resultSet.getString(1));
+                }
+                BarChart_AWT("Empty times Stats", dataset);
+            }
+
+        }
+        catch(Exception e)
+        {
+            System.out.println(e);
+        }
+    }
+    public void BarChart_AWT(  String chartTitle,DefaultCategoryDataset dataset ) {
+
+        JFreeChart barChart=null;
+        if(weightRadioButton.isSelected()) {
+            barChart = ChartFactory.createBarChart(
+                    chartTitle,
+                    "RCM",
+                    "Weight",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true, true, false);
+        }
+        else if(valueRadioButton.isSelected())
+        {
+          barChart = ChartFactory.createBarChart(
+                    chartTitle,
+                    "RCM",
+                    "Value",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    true, true, false);
+        }
+        else if(emptyTimesRadioButton.isSelected())
+        {
+            barChart = ChartFactory.createBarChart(
+                    chartTitle,
+                    "RCM",
+                    "Empty times",
+                    dataset,
+
+                    PlotOrientation.VERTICAL,
+                    true, true, false);
+        }
+
+        CategoryPlot plot = barChart.getCategoryPlot();
+
+        plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
+
+        ChartPanel chartPanel=new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new java.awt.Dimension(visualPanel.getWidth(),visualPanel.getHeight()) );
+        visualPanel.add(chartPanel);
+
+
+
+    }
+
     public void initComponents() throws SQLException {
 
 
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
         rcmButtons = new ArrayList<>();
-       // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
 
@@ -209,7 +530,7 @@ public class RmosMain extends ApplicationFrame{
         rcmId.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-       // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         rcmCapacity.setFont(new Font("Montserrat", Font.PLAIN, 15));
         rcmCapacity.setBackground(Color.white);
@@ -234,7 +555,7 @@ public class RmosMain extends ApplicationFrame{
         rcmLocation.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-       //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+        //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         comboBoxGroup.setFont(new Font("Montserrat", Font.PLAIN, 15));
         comboBoxGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
@@ -419,316 +740,6 @@ public class RmosMain extends ApplicationFrame{
 
         frame.setVisible(true);
     }
-
-    private void SubmitItem(ActionEvent e) throws SQLException {
-        lblError.setVisible(true);
-        if(newItemName.getText().length()<1)
-        {
-            lblError.setText("Please enter new item name");
-        }
-        else if (newItemId.getText().length()<1)
-        {
-            lblError.setText("Please enter new item ID");
-        }
-        else
-        {
-            lblError.setText(rmos.createItem(newItemId.getText(),newItemName.getText()));
-            loadGroup();
-        }
-    }
-
-    private RmosMain getOuter() {
-        return this;
-    }
-
-    class loadViewPanel implements Visitor {
-
-        public loadViewPanel() throws SQLException {
-            rmos.makeAccept(this);
-            loadButtons();
-        }
-
-        @Override
-        public void visit(RCM rcm) {
-            getOuter().rcmButtons.add(new RCMButton(rcm));
-        }
-
-        @Override
-        public void visit(RCMGroup rcmGroup) {
-
-        }
-
-        public void loadButtons(){
-            for (RCMButton rcmButton : rcmButtons) {
-                getOuter().viewFormPanel.add(rcmButton);
-            }
-        }
-    }
-    //Pattern (Mediator may be) enhance
-
-    private void SubmitGroup(ActionEvent e) throws SQLException {
-        lblError.setVisible(true);
-        if(txtGroupID.getText().length()<1)
-        {
-            lblError.setText("Please enter ID");
-        }
-        else if(txtGroupName.getText().length()<1)
-        {
-            lblError.setText("Please enter Name");
-        }
-        else
-        {
-            lblError.setText(rmos.createGroup(txtGroupID.getText(),txtGroupName.getText()));
-            loadGroup();
-        }
-    }
-    private void SubmitRCM(ActionEvent e) throws SQLException {
-        lblError.setVisible(true);
-        if(rcmId.getText().length()<1)
-        {
-            lblError.setText("Please enter ID");
-        }
-        else if(rcmCapacity.getText().length()<1)
-        {
-            lblError.setText("Please enter capacity");
-        }
-        else if(money.getText().length()<1)
-        {
-            lblError.setText("Please enter money");
-        }
-        else if(rcmLocation.getText().length()<1)
-        {
-            lblError.setText("Please enter location");
-        }
-        else
-        {
-            //Builder pattern applied
-            //boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
-            rmos.createRCM(rcmId.getText(), rcmLocation.getText(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), groupIds.getSelectedItem().toString());
-            DBConn.instance().InsertRCM(new RCMCreate.RCMCreateBuilder().withGroupId(groupIds.getSelectedItem().toString()).withRCMId(rcmId.getText()).withCapacity(Double.parseDouble(rcmCapacity.getText())).withCapacityLeft(Double.parseDouble(rcmCapacity.getText())).withMoney(Double.parseDouble(money.getText())).withLocation(rcmLocation.getText()).withOpStatus("inactive").build());
-            rmos.getGroupMap().get(groupIds.getSelectedItem().toString()).getRcmMap().put(rcmId.getText(),
-                                    new RCM.RCMBuilder().withRCMId(rcmId.getText())
-                .withGroupId(groupIds.getSelectedItem().toString())
-                .withLocation(rcmLocation.getText())
-                .withOpStatus(Status.valueOf("INACTIVE"))
-                .withCapacity(Double.parseDouble(rcmCapacity.getText()))
-                .withCapacityLeft(Double.parseDouble(rcmCapacity.getText()))
-                .withMoney(Double.parseDouble(money.getText()))
-                .build());
-            lblError.setText("RCM created");
-
-        }
-
-    }
-    private void loadGroup()
-    {
-        try {
-            //ResultSet result = DBConn.instance().GetGroups();
-            groupIds.removeAllItems();
-            comboBoxGroup.removeAllItems();
-            groupComboBox.removeAllItems();
-
-            groupIds.addItem("--Select--");
-            comboBoxGroup.addItem("--Select--");
-
-            groupComboBox.addItem("--Select--");
-            //while (result.next())
-            for (String rcmGroup : rmos.getGroupMap().keySet())
-            {
-
-                //groupIds.addItem(result.getString("groupId"));
-                //comboBoxGroup.addItem(result.getString("groupId"));
-                //groupComboBox.addItem(result.getString("groupId"));
-
-                groupIds.addItem(rcmGroup);
-                comboBoxGroup.addItem(rcmGroup);
-                groupComboBox.addItem(rcmGroup);
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-    //apply pattern
-    private void LoadRCM(String groupId)
-    {
-        try {
-            ResultSet result = DBConn.instance().GetRCM(groupId);
-            comboBoxRCM.removeAllItems();
-            RCMComboBox.removeAllItems();
-            comboBoxRCM.addItem("--Select--");
-            RCMComboBox.addItem("--Select--");
-            while (result.next())
-            {
-
-                comboBoxRCM.addItem(result.getString(1));
-                RCMComboBox.addItem(result.getString(1));
-
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-    private void SelectRCM(ActionEvent evt)
-    {
-        LoadRCM(comboBoxGroup.getSelectedItem().toString());
-    }
-    private void SelectRCMStats(ActionEvent evt)
-    {
-        LoadRCM(groupComboBox.getSelectedItem().toString());
-    }
-    private void LoadMonth()
-    {
-        comboBoxMonth.removeAllItems();
-        comboBoxMonth.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Month--", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}));
-
-    }
-    private void LoadYear()
-    {
-        comboBoxYear.removeAllItems();
-
-        comboBoxYear.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"--Year--"}));
-        for (int year = 2015; year <= Calendar.getInstance().get(Calendar.YEAR); year++) {
-            comboBoxYear.addItem(year + "");
-        }
-    }
-    private void SubmitTotalItems(ActionEvent evt)
-    {
-       /* if(comboBoxYear.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select group.");
-        }
-        else if(comboBoxRCM.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select RCM.");
-        }
-        else if(comboBoxMonth.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select month.");
-        }
-        else if(comboBoxYear.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select year.");
-        }
-        else {*/
-            int count = DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(), comboBoxMonth.getSelectedItem().toString(), comboBoxYear.getSelectedItem().toString());
-            lblMessage.setText("The total number of recycled items for the month " + comboBoxMonth.getSelectedItem().toString() + " is " + count);
-        //}
-    }
-    private void SubmitFrequentlyUsed(ActionEvent evt)
-    {
-        try {
-            ResultSet resultSet = DBConn.instance().GetMostFrequentlyUsedRCM(Integer.parseInt(txtNoOfDays.getText()));
-            while (resultSet.next()) {
-                lblFrequentlyUsed.setText("The most frequently used RCM is "+resultSet.getString(1)+" located at "+resultSet.getString(2));
-            }
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-    private void SubmitWeightValue(ActionEvent evt)
-    {
-        try {
-
-            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-            Date dateFrom = dateFormat.parse(txtFromDate.getText());
-            Date dateTo=dateFormat.parse(txtToDate.getText());
-            ResultSet resultSet=null;
-            DefaultCategoryDataset dataset =new DefaultCategoryDataset( );
-            if(emptyTimesRadioButton.isSelected()) {
-                resultSet = DBConn.instance().GetEmptyItemsByRCM(new java.sql.Date(dateFrom.getTime()), new java.sql.Date(dateTo.getTime()), RCMComboBox.getSelectedItem().toString());
-            }
-            else {
-                resultSet = DBConn.instance().GetWeightValueByRCM(new java.sql.Date(dateFrom.getTime()), new java.sql.Date(dateTo.getTime()), groupComboBox.getSelectedItem().toString());
-            }
-
-            if(weightRadioButton.isSelected()) {
-                while (resultSet.next()) {
-                    DefaultTableModel weightTableModel = (DefaultTableModel) (tableWeightValue.getModel());
-                    weightTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
-                    dataset.addValue(resultSet.getDouble(2), "RCM", resultSet.getString(1));
-                }
-                BarChart_AWT("Weight Stats", dataset);
-            }
-            else if(valueRadioButton.isSelected())
-            {
-                while (resultSet.next()) {
-                    DefaultTableModel valueTableModel = (DefaultTableModel) (tableWeightValue.getModel());
-                    valueTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(3)});
-                    dataset.addValue(resultSet.getDouble(3), "RCM", resultSet.getString(1));
-                }
-                BarChart_AWT("Value Stats", dataset);
-
-            }
-            else if(emptyTimesRadioButton.isSelected())
-            {
-
-                while (resultSet.next()) {
-                    DefaultTableModel emptyTableModel = (DefaultTableModel) (tableWeightValue.getModel());
-                    emptyTableModel.addRow(new String[]{resultSet.getString(1), resultSet.getString(2)});
-                    dataset.addValue(resultSet.getInt(2), "RCM", resultSet.getString(1));
-                }
-                BarChart_AWT("Empty times Stats", dataset);
-            }
-
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-        }
-    }
-    public void BarChart_AWT(  String chartTitle,DefaultCategoryDataset dataset ) {
-
-        JFreeChart barChart=null;
-        if(weightRadioButton.isSelected()) {
-            barChart = ChartFactory.createBarChart(
-                    chartTitle,
-                    "RCM",
-                    "Weight",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    true, true, false);
-        }
-        else if(valueRadioButton.isSelected())
-        {
-          barChart = ChartFactory.createBarChart(
-                    chartTitle,
-                    "RCM",
-                    "Value",
-                    dataset,
-                    PlotOrientation.VERTICAL,
-                    true, true, false);
-        }
-        else if(emptyTimesRadioButton.isSelected())
-        {
-            barChart = ChartFactory.createBarChart(
-                    chartTitle,
-                    "RCM",
-                    "Empty times",
-                    dataset,
-
-                    PlotOrientation.VERTICAL,
-                    true, true, false);
-        }
-
-        CategoryPlot plot = barChart.getCategoryPlot();
-
-        plot.getRenderer().setSeriesPaint(0, new Color(29, 57, 65));
-
-        ChartPanel chartPanel=new ChartPanel(barChart);
-        chartPanel.setPreferredSize(new java.awt.Dimension(visualPanel.getWidth(),visualPanel.getHeight()) );
-        visualPanel.add(chartPanel);
-
-
-
-    }
-
-
 
 
 }

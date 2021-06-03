@@ -93,9 +93,13 @@ public class RCM implements VisitableComponent {
         if(resultSet == null){
             return;
         }
-        while((resultSet != null) && (resultSet.next())) {
-            itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getString("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
+        while((resultSet.next())) {
+            itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getInt("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
         }
+    }
+
+    public String getGroupId() {
+        return this.groupId;
     }
 
     public static class RCMBuilder {
@@ -273,11 +277,16 @@ public class RCM implements VisitableComponent {
     
 
     public void empty() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        Date date = new Date();
-        lastEmptiedStr = dateFormat.format(date);
-        db.setLastEmptied(rcmId, lastEmptiedStr);
+
+        Date now = new Date();
+        java.sql.Date lastEmptied = new java.sql.Date(now.getTime());
+
+        db.setLastEmptied(rcmId, lastEmptied);
         this.setStatus(Status.FULL);
+
+        this.capacityLeft = capacity;
+
+        db.setCapacityLeft(rcmId, capacity);
 
         //update transaction log
     }

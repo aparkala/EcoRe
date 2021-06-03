@@ -45,18 +45,20 @@ public class RCMGroup implements VisitableComponent{
 
     private void init() throws SQLException {
         ResultSet result = db.getRCMsFromGroup(this.groupId);
-
-        while(result.next()) {
-            rcmMap.put(result.getString("rcmId"), new RCM.RCMBuilder().withRCMId(result.getString("rcmId"))
-                                .withGroupId(this.groupId)
-                                .withLocation(result.getString("rcmLocation"))
-                                .withOpStatus(Status.valueOf(result.getString("opStatus")))
-                                .withCapacity(result.getDouble("rcmCapacity"))
-                                .withCapacityLeft(result.getDouble("rcmCapacity"))
-                                .withMoney(result.getDouble("money"))
-                                .build());
+        if (result != null) {
+            while (result.next()) {
+                rcmMap.put(result.getString("rcmId"), new RCM.RCMBuilder().withRCMId(result.getString("rcmId"))
+                        .withGroupId(this.groupId)
+                        .withLocation(result.getString("rcmLocation"))
+                        .withOpStatus(Status.valueOf(result.getString("opStatus")))
+                        .withCapacity(result.getDouble("rcmCapacity"))
+                        .withCapacityLeft(result.getDouble("rcmCapacity"))
+                        .withMoney(result.getDouble("money"))
+                        .build());
+            }
         }
     }
+
     void print(){
         System.out.println("GroupId: " + groupId
                             + "GroupName: " + groupName);
