@@ -172,19 +172,17 @@ public class DBConn {
         return result;
     }
 
-    public void setStatusActive(String rcmID){
-        // change rcm status to ACTIVE
-        boolean status=false;
+    public void setStatus(String rcmID, Status status){
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
             Connection conn = DriverManager.getConnection(
                     "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
             String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
             PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,"ACTIVE");
+            ps.setString(1,status.toString());
             ps.setString(2,rcmID);
 
-            status=ps.execute();
+            ps.execute();
             conn.close();
             return;
         }
@@ -196,51 +194,7 @@ public class DBConn {
 
     }
 
-    public void setStatusInactive(String rcmID){
-        // change rcm status to INACTIVE
-        boolean status=false;
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,"INACTIVE");
-            ps.setString(2,rcmID);
 
-            status=ps.execute();
-            conn.close();
-            return;
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-            return;
-        }
-    }
-
-    public void setStatusFull(String rcmId){
-        // change rcm status to FULL
-        boolean status=false;
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            Connection conn = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@localhost:1521/orcl", "hr", "oracle");
-            String query = "UPDATE RCM_ SET opStatus=? WHERE rcmID=?";
-            PreparedStatement ps = conn.prepareStatement(query);
-            ps.setString(1,"FULL");
-            ps.setString(2,rcmId);
-
-            status=ps.execute();
-            conn.close();
-            return;
-        }
-        catch(Exception e)
-        {
-            System.out.println(e);
-            return;
-        }
-    }
 
     public void setLastEmptied(String rcmId, java.sql.Date lastEmptied){
         // change rcm last emptied

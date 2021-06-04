@@ -198,10 +198,7 @@ public class RCM implements VisitableComponent {
     {
         this.capacityLeft=capacityAvailable;
     }
-    public String getGroupId()
-    {
-        return this.groupId=groupId;
-    }
+
     public Status getOpStatus()
     {
         return this.opStatus=opStatus;
@@ -273,14 +270,12 @@ public class RCM implements VisitableComponent {
 
     //Other methods
     public void deactivate(){
-        db.setStatusInactive(rcmId);
         this.setStatus(Status.INACTIVE);
-        //update transaction log ?
+        db.setStatus(rcmId, opStatus);
     }
     public void activate(){
-        db.setStatusActive(rcmId);
         this.setStatus(Status.ACTIVE);
-        //update transaction log?
+        db.setStatus(rcmId, opStatus);
     }
     
 
