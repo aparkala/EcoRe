@@ -198,6 +198,14 @@ public class RCM implements VisitableComponent {
     {
         this.capacityLeft=capacityAvailable;
     }
+    public String getGroupId()
+    {
+        return this.groupId=groupId;
+    }
+    public Status getOpStatus()
+    {
+        return this.opStatus=opStatus;
+    }
 
     @Override
     public String toString() {

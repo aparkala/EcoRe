@@ -170,7 +170,7 @@ public class viewRCM extends FocusAdapter{
     }
 
     private void deleteRCM(ActionEvent actionEvent){
-        //delete
+
     }
 
     void removeItem(ActionEvent actionEvent){

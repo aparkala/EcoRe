@@ -100,7 +100,7 @@ public class Menu{
         {
             metric="kgs";
         }
-        RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metric); //send this via class object
+       // RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metric); //send this via class object
     }
     public static void main(String[] args) {
        Menu m = new Menu();

@@ -10,7 +10,6 @@ public class RCMTransaction {
         private double weight;
         private Date insertedDate;
         private int cash;
-       // private double capacityLeft;
         private double price;
         private int isEmpty;
         private String groupId;

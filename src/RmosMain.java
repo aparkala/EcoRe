@@ -96,6 +96,8 @@ public class RmosMain extends ApplicationFrame{
     private JPanel submitItemPane;
     private JButton submitItem;
     private JTextField newItemId;
+    private JLabel lblItemId;
+    private JLabel lblItemName;
     private JPanel viewCardPanel;
     private JPanel viewCardLayoutPane;
     private JPanel viewPanel;
@@ -114,6 +116,7 @@ public class RmosMain extends ApplicationFrame{
         Printer.printLn();
         Printer.print("In RMOSMain Constructor");
         rmos = RMOS.get_instance();
+
         initComponents();
     }
 
@@ -443,7 +446,7 @@ public class RmosMain extends ApplicationFrame{
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
         rcmButtons = new ArrayList<>();
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
         frame.setLocationRelativeTo(null);
 
@@ -504,6 +507,12 @@ public class RmosMain extends ApplicationFrame{
         lblFrequentlyUsed.setForeground(Color.white);
         lblFrequentlyUsed.setFont(new Font("Montserrat", Font.PLAIN, 25));
 
+        lblItemId.setForeground(Color.black);
+        lblItemId.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblItemName.setForeground(Color.black);
+        lblItemName.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
         txtGroupID.setFont(new Font("Montserrat", Font.PLAIN, 15));
         txtGroupID.setBackground(Color.white);
         txtGroupID.setForeground(Color.black);
@@ -530,7 +539,7 @@ public class RmosMain extends ApplicationFrame{
         rcmId.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-        // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+       // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         rcmCapacity.setFont(new Font("Montserrat", Font.PLAIN, 15));
         rcmCapacity.setBackground(Color.white);
@@ -555,7 +564,7 @@ public class RmosMain extends ApplicationFrame{
         rcmLocation.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-        //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
+       //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         comboBoxGroup.setFont(new Font("Montserrat", Font.PLAIN, 15));
         comboBoxGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
@@ -618,6 +627,20 @@ public class RmosMain extends ApplicationFrame{
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
 
+        newItemId.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        newItemId.setBackground(Color.white);
+        newItemId.setForeground(Color.black);
+        newItemId.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
+        newItemName.setFont(new Font("Montserrat", Font.PLAIN, 15));
+        newItemName.setBackground(Color.white);
+        newItemName.setForeground(Color.black);
+        newItemName.setBorder(BorderFactory.createCompoundBorder(
+                new CustomBorder(),
+                new EmptyBorder(new Insets(15, 25, 15, 25))));
+
         submitGroup.setFont(new Font("Montserrat", Font.PLAIN, 20));
         submitGroup.setForeground(Color.black);
         submitGroup.setBounds(420, 365, 350, 90);
@@ -638,6 +661,11 @@ public class RmosMain extends ApplicationFrame{
         buttonWeightValue.setFont(new Font("Montserrat", Font.PLAIN, 20));
         buttonWeightValue.setForeground(Color.black);
         buttonWeightValue.setBounds(420, 365, 350, 90);
+
+        submitItem.setFont(new Font("Montserrat", Font.PLAIN, 20));
+        submitItem.setForeground(Color.black);
+        submitItem.setBounds(420, 365, 350, 90);
+
 
         weightRadioButton.addActionListener(new ActionListener() {
             @Override

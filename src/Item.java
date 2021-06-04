@@ -21,26 +21,21 @@ public class Item {
     {
         return this.itemID;
     }
-    public void setItemID(int ItemID)
+    public  String getItemIdStr()
     {
-        this.itemID=itemID;
+        return this.itemIdStr;
     }
+
     public String getItemName()
     {
         return this.itemName;
     }
-    public void setItemName(String itemName)
-    {
-        this.itemName=itemName;
-    }
+
     public double getPricePerMetric()
     {
         return this.pricePerMetric;
     }
-    public void setPricePerMetric(double pricePerMetric)
-    {
-        this.pricePerMetric=pricePerMetric;
-    }
+
 
     void print() {
         System.out.println(this.toString());

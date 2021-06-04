@@ -69,7 +69,7 @@ public class DBConn {
         }
     }
     //boolean InsertRCM(String rcmId,String groupId,double rcmCapacity,double money,String rcmLocation) {
-    boolean InsertRCM(RCMCreate rcmCreate) {
+    boolean InsertRCM(RCM rcmCreate) {
         boolean status=false;
         try {
             Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -82,8 +82,8 @@ public class DBConn {
             ps.setString(3,rcmCreate.getLocation());
             ps.setDouble(4,rcmCreate.getCapacity());
             ps.setDouble(5,rcmCreate.getCapacityLeft());
-            ps.setDouble(6,rcmCreate.getMoney());
-            ps.setString(7,rcmCreate.getOpStatus());
+            ps.setDouble(6,rcmCreate.getMoneyLeft());
+            ps.setString(7,rcmCreate.getStatus().toString());
 
             status=ps.execute();
             conn.close();
