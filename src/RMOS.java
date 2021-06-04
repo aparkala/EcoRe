@@ -27,17 +27,14 @@ public class RMOS {
         while(result.next()) {
             this.groupMap.put(result.getString("groupId"),new RCMGroup(result.getString("groupId"), result.getString("groupName")));
         }
-        for (RCMGroup rcmGroup : groupMap.values()) {
-            rcmGroup.print();
-        }
+
 
         ResultSet resultSet = db.getAllItems();
         while(resultSet.next()){
             this.itemMapToId.put(resultSet.getInt("itemId"), resultSet.getString("itemName"));
             this.itemMapToName.put(resultSet.getString("itemName"), resultSet.getInt("itemId"));
         }
-        System.out.println(itemMapToId);
-        System.out.println(itemMapToName);
+
     }
 
 
@@ -46,7 +43,7 @@ public class RMOS {
         return groupMap.get(groupId).getRcmMap().get(rcmID);
     }
 
-    String createItem(String itemId, String itemName){
+    String createItem(String itemId, String itemName) throws SQLException {
         if (itemMapToId.containsKey(Integer.parseInt(itemId))) {
             return "Item already exists with name '" + itemMapToId.get(itemId) + "' in the database";
         }
@@ -54,9 +51,9 @@ public class RMOS {
             return "Item already exists with ID '" + itemMapToName.get(itemName) + "' in the database";
         }
         else {
-            itemMapToName.put(itemName.toLowerCase(), Integer.parseInt(itemId));
-            itemMapToId.put(Integer.parseInt(itemId), itemName.toLowerCase());
+
             db.insertItem(itemName.toLowerCase());
+            LoadItems();
             return "Item successfully created";
         }
     }
@@ -66,7 +63,7 @@ public class RMOS {
             return "Group already exists with the ID in the database";
         }
         else {
-            groupMap.put(groupId, new RCMGroup(groupId, groupName)); //handle new groups in RCM Group constructor
+            groupMap.put(groupId.toLowerCase(), new RCMGroup(groupId.toLowerCase(), groupName)); //handle new groups in RCM Group constructor
             db.InsertGroups(groupId.toLowerCase(), groupName.toLowerCase());
             return "Group successfully created";
         }
@@ -102,7 +99,7 @@ public class RMOS {
 
     String removeItemFromRCM(RCM rcm, String itemName){
         db.removeRcmItem(rcm.getRcmId(),itemMapToName.get(itemName));
-        rcm.getAvailableItems().remove(itemMapToName.get(itemName));
+        rcm.getAvailableItems().remove(itemName);
         return "Item successfully removed";
     }
 
@@ -115,7 +112,7 @@ public class RMOS {
     String modifyItemOfRCM(RCM rcm, String itemName, double newItemPrice){
         db.changeItemPrice(rcm.getRcmId(),itemMapToName.get(itemName), newItemPrice);
         rcm.getAvailableItems().replace(itemName.toLowerCase(), new Item(itemMapToName.get(itemName), itemName, newItemPrice));
-        return "Item successfully added";
+        return "Item successfully modified";
     }
 
     public void deactivate(RCM rcm){
@@ -127,8 +124,18 @@ public class RMOS {
     }
 
     public void empty(RCM rcm){
+        int transactionId= db.GetMaxTransactionId();
+       int itemId=db.GetItem(rcm.getRcmId());
+       rcm.setStatus(Status.ACTIVE);
+        db.setStatus(rcm.getRcmId(), rcm.getOpStatus());
         rcm.empty();
+        db.InsertEmptyTransaction(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId+1).withRCMId(rcm.getRcmId()).withGroupId(rcm.getGroupId()).withInsertedDate(rcm.getLastEmptied()).withIsEmpty(1).build(),itemId);
 
+
+    }
+    public void delete(RCM rcm){
+        rcm.setStatus(Status.DELETED);
+        db.setStatus(rcm.getRcmId(), rcm.getOpStatus());
     }
     public static void main(String args[]) throws SQLException {
         RMOS rmos = new RMOS().get_instance();
@@ -138,6 +145,16 @@ public class RMOS {
 
     public HashMap<String, Integer> getItemMapToName() {
         return this.itemMapToName;
+    }
+    private void LoadItems() throws SQLException {
+        ResultSet resultSet = db.getAllItems();
+        itemMapToId=new HashMap<>();
+        itemMapToName=new HashMap<>();
+        while(resultSet.next()){
+            this.itemMapToId.put(resultSet.getInt("itemId"), resultSet.getString("itemName"));
+            this.itemMapToName.put(resultSet.getString("itemName"), resultSet.getInt("itemId"));
+        }
+
     }
 }
 

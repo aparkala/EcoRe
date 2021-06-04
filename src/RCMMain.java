@@ -67,7 +67,8 @@ public class RCMMain extends FocusAdapter {
 
         rmos = RMOS.get_instance();
         rcm = rmos.getRCM(groupID, rcmId);
-
+        moneyLeft=rcm.getMoneyLeft();
+        capacityLeft=rcm.getCapacityLeft();
         //itemsList = (List<Item>) rcm.getAvailableItems().values();
 
         LoadRCMItems();
@@ -93,7 +94,7 @@ public class RCMMain extends FocusAdapter {
                 {
                 if(!itemsList.stream().anyMatch(validItem))
                 {
-                    lblError.setText("Not accepted");
+                    lblError.setText("Item not accepted.");
                     txtItem.setText("");
                 }}
 
@@ -216,7 +217,7 @@ public class RCMMain extends FocusAdapter {
         }
         else if(Double.parseDouble(txtWeight.getText())>rcm.getCapacityLeft())
         {
-            lblError.setText("Sorry!Machine is full. Cannot accept the item.");
+            lblError.setText("Sorry!Weight input exceeds the capacity of the machine.");
 
 
         }
@@ -299,7 +300,7 @@ public class RCMMain extends FocusAdapter {
         final int cashCoupon=cash;
         rcmTransactions.stream().forEach(e->e.setCash(cashCoupon));
         DBConn.instance().InsertRCMItems(rcmTransactions);
-        DBConn.instance().UpdateCapacityMoney(capacityLeft,moneyLeft,rcmId);
+        DBConn.instance().UpdateCapacityMoney(rcm.getCapacityLeft(),moneyLeft,rcmId);
         frame.dispose();
 
 
