@@ -98,6 +98,8 @@ public class RmosMain extends ApplicationFrame{
     private JTextField newItemId;
     private JLabel lblItemId;
     private JLabel lblItemName;
+    private JButton refreshButton;
+    private JLabel lblItem;
     private JPanel viewCardPanel;
     private JPanel viewCardLayoutPane;
     private JPanel viewPanel;
@@ -157,10 +159,6 @@ public class RmosMain extends ApplicationFrame{
             getOuter().rcmButtons.add(new RCMButton(rcm));
         }
 
-        @Override
-        public void visit(RCMGroup rcmGroup) {
-
-        }
 
         public void loadButtons(){
             for (RCMButton rcmButton : rcmButtons) {
@@ -213,7 +211,7 @@ public class RmosMain extends ApplicationFrame{
             //boolean status=DBConn.instance().InsertRCM(rcmId.getText(),groupIds.getSelectedItem().toString(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), rcmLocation.getText());
             String status = rmos.createRCM(rcmId.getText(), rcmLocation.getText(), Double.parseDouble(rcmCapacity.getText()), Double.parseDouble(money.getText()), groupIds.getSelectedItem().toString());
 
-            new loadViewPanel();
+            Refresh(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,null));
             lblError.setText(status);
 
         }
@@ -351,7 +349,7 @@ public class RmosMain extends ApplicationFrame{
             Date dateFrom = dateFormat.parse(txtFromDate.getText());
             Date dateTo=dateFormat.parse(txtToDate.getText());
             ResultSet resultSet=null;
-            DefaultCategoryDataset dataset =new DefaultCategoryDataset( );
+            DefaultCategoryDataset dataset =new DefaultCategoryDataset();
             if(emptyTimesRadioButton.isSelected()) {
                 resultSet = DBConn.instance().GetEmptyItemsByRCM(new java.sql.Date(dateFrom.getTime()), new java.sql.Date(dateTo.getTime()), RCMComboBox.getSelectedItem().toString());
             }
@@ -434,10 +432,19 @@ public class RmosMain extends ApplicationFrame{
 
         ChartPanel chartPanel=new ChartPanel(barChart);
         chartPanel.setPreferredSize(new java.awt.Dimension(visualPanel.getWidth(),visualPanel.getHeight()) );
+        visualPanel.removeAll();
         visualPanel.add(chartPanel);
+        visualPanel.repaint();
+        visualPanel.revalidate();
 
 
 
+    }
+    private void Refresh(ActionEvent e) throws SQLException {
+        viewFormPanel.removeAll();
+        new loadViewPanel();
+        viewFormPanel.repaint();
+        viewFormPanel.revalidate();
     }
 
     public void initComponents() throws SQLException {
@@ -447,7 +454,7 @@ public class RmosMain extends ApplicationFrame{
         frame.setContentPane(rmosMain);
         rcmButtons = new ArrayList<>();
        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBounds(100, 100, 1200, 725);
+        frame.setBounds(100, 100, 1200, 900);
         frame.setLocationRelativeTo(null);
 
         ImageIcon icon = new ImageIcon("Images/ecore.png");
@@ -486,6 +493,9 @@ public class RmosMain extends ApplicationFrame{
 
         lblRCM.setForeground(Color.white);
         lblRCM.setFont(new Font("Montserrat", Font.PLAIN, 20));
+
+        lblItem.setForeground(Color.white);
+        lblItem.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
         lblNoOfItemsHeader.setForeground(Color.white);
         lblNoOfItemsHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
@@ -738,6 +748,13 @@ public class RmosMain extends ApplicationFrame{
         buttonSubmit.addActionListener(evt -> SubmitTotalItems(evt));
         buttonFrequentlyUsed.addActionListener(evt -> SubmitFrequentlyUsed(evt));
         buttonWeightValue.addActionListener(evt->SubmitWeightValue(evt));
+        refreshButton.addActionListener(evt-> {
+            try {
+                Refresh(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
         submitItem.addActionListener(evt -> {
             try {
                 SubmitItem(evt);

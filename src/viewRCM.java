@@ -41,6 +41,7 @@ public class viewRCM extends FocusAdapter{
     private JLabel lblSelectItem;
     private JLabel lblNewPrice;
     private JLabel lblRemoveSelectItem;
+    private JFrame frame;
     RCM rcm;
     RMOS rmos;
 
@@ -48,13 +49,14 @@ public class viewRCM extends FocusAdapter{
 
     public viewRCM(RCM rcm) throws Exception {
         this.rcm = rcm;
-        rmos = RMOS.get_instance();
 
+        rmos = RMOS.get_instance();
+        System.out.println(rcm.toString());
         initComponents();
     }
 
     public void initComponents() throws Exception {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setContentPane(viewRcmPane);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 725);
@@ -64,6 +66,7 @@ public class viewRCM extends FocusAdapter{
         lblStatus.setForeground(Color.white);
         lblStatus.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
+        lblHeader.setText(rcm.getRcmId()+" AT "+rcm.getLocation());
         lblHeader.setForeground(Color.white);
         lblHeader.setFont(new Font("Montserrat", Font.PLAIN, 20));
 
@@ -170,6 +173,16 @@ public class viewRCM extends FocusAdapter{
     }
 
     private void deleteRCM(ActionEvent actionEvent){
+        String message = "Are you sure you want to delete?";
+        Object[] options = {"Yes", "No"};
+        int n = JOptionPane.showOptionDialog(null, message, null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+        if(n==JOptionPane.YES_OPTION)
+        {
+            rmos.delete(rcm);
+            frame.dispose();
+
+
+        }
 
     }
 
@@ -254,13 +267,14 @@ public class viewRCM extends FocusAdapter{
 
     private void loadStatusTable(){
 
-        String[] rowNames = {"LOCATION", "OP_STATUS", "WEIGHT OF ITEMS", "MONEY LEFT", "LAST EMPTIED"};
+        String[] rowNames = {"LOCATION", "OP_STATUS","CAPACITY", "WEIGHT OF ITEMS", "MONEY LEFT", "LAST EMPTIED"};
         String[] columnNames = {"Attribute", "Value"};
         String[] data = {rcm.getLocation(),
                 String.valueOf(rcm.getStatus()),
+                String.valueOf(rcm.getCapacity()),
                 String.valueOf(rcm.getCapacity() - rcm.getCapacityLeft()),
                 String.valueOf(rcm.getMoneyLeft()),
-                rcm.getLastEmptiedStr()};
+                String.valueOf(rcm.getLastEmptied())};
         statusTable.setModel(new DefaultTableModel(columnNames, 0) {public boolean isCellEditable(int row, int column) { return false; }});
         statusTable.setRowHeight(40);
         statusTable.getTableHeader().setReorderingAllowed(false);

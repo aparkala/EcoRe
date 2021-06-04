@@ -52,9 +52,10 @@ public class RCMGroup implements VisitableComponent{
                         .withLocation(result.getString("rcmLocation"))
                         .withOpStatus(Status.valueOf(result.getString("opStatus")))
                         .withCapacity(result.getDouble("rcmCapacity"))
-                        .withCapacityLeft(result.getDouble("rcmCapacity"))
+                        .withCapacityLeft(result.getDouble("capacityLeft"))
                         .withMoney(result.getDouble("money"))
                         .build());
+                rcmMap.get(result.getString("rcmId")).setLastEmptied(result.getDate("lastEmptied"));
             }
         }
     }

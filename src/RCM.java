@@ -21,6 +21,7 @@ public class RCM implements VisitableComponent {
     private double capacityLeft;
     private double money;
     private String lastEmptiedStr;
+    private java.sql.Date lastEmptied;
     private Status opStatus;
     private HashMap<String,Item> itemMap;
     private List<HashMap<Item,Double>> insertedItems;
@@ -28,7 +29,9 @@ public class RCM implements VisitableComponent {
 
     @Override
     public void accept(RmosMain.loadViewPanel buttonLoader) {
-        buttonLoader.visit(this);
+        if(!opStatus.equals(Status.DELETED)) {
+            buttonLoader.visit(this);
+        }
     }
 
     public RCM(String rcmId) throws Exception {
@@ -197,11 +200,12 @@ public class RCM implements VisitableComponent {
     public void setCapacityLeft(double capacityAvailable)
     {
         this.capacityLeft=capacityAvailable;
+        if(capacityLeft==0)
+        {
+        this.setStatus(Status.FULL);
+        }
     }
-    public String getGroupId()
-    {
-        return this.groupId=groupId;
-    }
+
     public Status getOpStatus()
     {
         return this.opStatus=opStatus;
@@ -236,9 +240,9 @@ public class RCM implements VisitableComponent {
         return this.lastEmptiedStr;
 
     }
-    public void setLastEmptied(String lastEmptiedStr)
+    public void setLastEmptied(java.sql.Date lastEmptied)
     {
-        this.lastEmptiedStr=lastEmptiedStr;
+        this.lastEmptied=lastEmptied;
     }
 
     public Status getStatus()
@@ -287,16 +291,21 @@ public class RCM implements VisitableComponent {
     public void empty() {
 
         Date now = new Date();
-        java.sql.Date lastEmptied = new java.sql.Date(now.getTime());
+        lastEmptied = new java.sql.Date(now.getTime());
 
         db.setLastEmptied(rcmId, lastEmptied);
-        this.setStatus(Status.FULL);
+        this.setStatus(Status.ACTIVE);
 
+        this.setLastEmptied(lastEmptied);
         this.capacityLeft = capacity;
 
         db.setCapacityLeft(rcmId, capacity);
 
         //update transaction log
+    }
+    public java.sql.Date getLastEmptied()
+    {
+        return this.lastEmptied;
     }
 
     void print() {
