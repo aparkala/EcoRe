@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="Current working">
-      <change afterPath="$PROJECT_DIR$/src/Printer.java" afterDir="false" />
+    <list default="true" id="c50ad013-9dc4-412d-b3b6-8bd4c0cc6ed0" name="Default Changelist" comment="First Working :D">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DBConn.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/DBConn.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCM.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RCMGroup.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RCMGroup.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RMOS.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RMOS.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RmosMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RmosMain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/viewRCM.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/viewRCM.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -174,7 +168,14 @@
       <option name="project" value="LOCAL" />
       <updated>1622675716127</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="First Working :D">
+      <created>1622698338286</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1622698338286</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -194,7 +195,8 @@
     <MESSAGE value="Create, View, Modify GUI" />
     <MESSAGE value="RCM and Stats module added" />
     <MESSAGE value="Current working" />
-    <option name="LAST_COMMIT_MESSAGE" value="Current working" />
+    <MESSAGE value="First Working :D" />
+    <option name="LAST_COMMIT_MESSAGE" value="First Working :D" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -540,7 +542,7 @@
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
-      <inline-watch fileUrl="file://$PROJECT_DIR$/src/MainMenu.java" line="190">
+      <inline-watch fileUrl="file://$PROJECT_DIR$/src/MainMenu.java" line="178">
         <watch expression="&#10;        if(lbsRadioButton.isSelected())&#10;        {&#10;            metric=&quot;lbs&quot;;" />
       </inline-watch>
     </watches-manager>

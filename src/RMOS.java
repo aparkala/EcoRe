@@ -13,13 +13,10 @@ public class RMOS {
 
     private HashMap<Integer, String> itemMapToId = new HashMap<>();
     private HashMap<String, Integer> itemMapToName = new HashMap<>();
-    private HashMap<String, String> groupMapToId = new HashMap<>();
-    private HashMap<String, String> groupMapToName = new HashMap<>();
 
     private RMOS(){}
 
     public HashMap<String, RCMGroup> getGroupMap() { return this.groupMap; }
-    public HashMap<Integer, String> getItemMapToId() { return this.itemMapToId; }
 
     public static RMOS get_instance(){
         return singleton;
