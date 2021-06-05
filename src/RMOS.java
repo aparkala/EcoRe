@@ -10,9 +10,10 @@ public class RMOS {
     DBConn db = DBConn.instance();
     private static final RMOS singleton = new RMOS();
     private HashMap<String,RCMGroup> groupMap = new HashMap<>();
-
     private HashMap<Integer, String> itemMapToId = new HashMap<>();
     private HashMap<String, Integer> itemMapToName = new HashMap<>();
+    ItemDao itemDao;
+    ItemDaoFactory itemDaoFactory;
 
     private RMOS(){}
 
@@ -23,11 +24,13 @@ public class RMOS {
     }
 
     void init() throws SQLException {
-        ResultSet result = db.getGroupIds();
+        ResultSet result = db.GetGroups();
         while(result.next()) {
             this.groupMap.put(result.getString("groupId"),new RCMGroup(result.getString("groupId"), result.getString("groupName")));
         }
 
+        itemDaoFactory = DBItemDaoFactory.getInstance();
+        itemDao = itemDaoFactory.createItemDao();
 
         ResultSet resultSet = db.getAllItems();
         while(resultSet.next()){
@@ -98,19 +101,19 @@ public class RMOS {
 
 
     String removeItemFromRCM(RCM rcm, String itemName){
-        db.removeRcmItem(rcm.getRcmId(),itemMapToName.get(itemName));
+        itemDao.removeRcmItem(rcm.getRcmId(),itemMapToName.get(itemName));
         rcm.getAvailableItems().remove(itemName);
         return "Item successfully removed";
     }
 
     String addItemToRCM(RCM rcm, String itemName, double itemPrice){
-        db.insertRcmItem(rcm.getRcmId(),itemMapToName.get(itemName.toLowerCase()), itemPrice);
+        itemDao.insertRcmItem(rcm.getRcmId(),itemMapToName.get(itemName.toLowerCase()), itemPrice);
         rcm.getAvailableItems().put(itemName.toLowerCase(), new Item(itemMapToName.get(itemName), itemName.toLowerCase(), itemPrice));
         return "Item successfully added";
     }
 
     String modifyItemOfRCM(RCM rcm, String itemName, double newItemPrice){
-        db.changeItemPrice(rcm.getRcmId(),itemMapToName.get(itemName), newItemPrice);
+        itemDao.changeItemPrice(rcm.getRcmId(),itemMapToName.get(itemName), newItemPrice);
         rcm.getAvailableItems().replace(itemName.toLowerCase(), new Item(itemMapToName.get(itemName), itemName, newItemPrice));
         return "Item successfully modified";
     }
@@ -123,9 +126,11 @@ public class RMOS {
         rcm.activate();
     }
 
-    public void empty(RCM rcm){
+    public void empty(RCM rcm) throws SQLException {
         int transactionId= db.GetMaxTransactionId();
-       int itemId=db.GetItem(rcm.getRcmId());
+      List<Item> items = new ArrayList<>();
+      items = itemDao.GetRCMItems(rcm.getRcmId());
+       int itemId = items.get(0).getItemID();
        rcm.setStatus(Status.ACTIVE);
         db.setStatus(rcm.getRcmId(), rcm.getOpStatus());
         rcm.empty();

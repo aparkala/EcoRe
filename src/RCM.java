@@ -26,6 +26,8 @@ public class RCM implements VisitableComponent {
     private HashMap<String,Item> itemMap;
     private List<HashMap<Item,Double>> insertedItems;
     private DBConn db = DBConn.instance();
+    ItemDao itemDao;
+    ItemDaoFactory daoFactory;
 
     @Override
     public void accept(RmosMain.loadViewPanel buttonLoader) {
@@ -45,8 +47,9 @@ public class RCM implements VisitableComponent {
             this.capacity = result.getDouble(4);
             this.capacityLeft = result.getDouble(5);
             this.money = result.getDouble(8);
-
         }
+        daoFactory = DBItemDaoFactory.getInstance();
+        itemDao = daoFactory.createItemDao();
     }
 
     /**public RCM(String groupId, String location, double capacity, double capacityLeft, double moneyLeft, String lastEmptiedStr, Status status) {
@@ -91,13 +94,14 @@ public class RCM implements VisitableComponent {
     }
 
     void init() throws SQLException {
-        ResultSet resultSet = db.GetRCMItems(this.rcmId);
+        List<Item> itemList = itemDao.GetRCMItems(this.rcmId);
 
-        if(resultSet == null){
+        if (itemList.size() == 0){
             return;
         }
-        while((resultSet.next())) {
-            itemMap.put(resultSet.getString("itemName"), new Item(resultSet.getInt("itemId"), resultSet.getString("itemName"), resultSet.getDouble("itemPrice")));
+
+        for (Item item : itemList){
+            itemMap.put(item.getItemName(), item);
         }
     }
 
@@ -208,7 +212,7 @@ public class RCM implements VisitableComponent {
 
     public Status getOpStatus()
     {
-        return this.opStatus=opStatus;
+        return this.opStatus;
     }
 
     @Override

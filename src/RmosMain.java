@@ -103,7 +103,6 @@ public class RmosMain extends ApplicationFrame{
     private JPanel viewCardPanel;
     private JPanel viewCardLayoutPane;
     private JPanel viewPanel;
-    private ViewForm viewForm1;
     private JPanel viewPane2;
     private JLabel lblRCMError;
     private String[] RCMWEIGHT = {"RCM","WEIGHT"};
@@ -221,7 +220,6 @@ public class RmosMain extends ApplicationFrame{
     {
         Printer.print("In Load Group");
         try {
-            //ResultSet result = DBConn.instance().GetGroups();
             groupIds.removeAllItems();
             comboBoxGroup.removeAllItems();
             groupComboBox.removeAllItems();
@@ -230,13 +228,9 @@ public class RmosMain extends ApplicationFrame{
             comboBoxGroup.addItem("--Select--");
 
             groupComboBox.addItem("--Select--");
-            //while (result.next())
+
             for (String rcmGroup : rmos.getGroupMap().keySet())
             {
-
-                //groupIds.addItem(result.getString("groupId"));
-                //comboBoxGroup.addItem(result.getString("groupId"));
-                //groupComboBox.addItem(result.getString("groupId"));
 
                 groupIds.addItem(rcmGroup);
                 comboBoxGroup.addItem(rcmGroup);
@@ -254,14 +248,12 @@ public class RmosMain extends ApplicationFrame{
     private void LoadRCM(String groupId)
     {
         try {
-            ResultSet result = DBConn.instance().GetRCM(groupId);
-
 
             comboBoxRCM.removeAllItems();
             RCMComboBox.removeAllItems();
             comboBoxRCM.addItem("--Select--");
             RCMComboBox.addItem("--Select--");
-            //while (result.next())
+
             for(RCM rcm : rmos.getGroupMap().get(groupId).getRcmMap().values())
             {
 
@@ -277,10 +269,7 @@ public class RmosMain extends ApplicationFrame{
     }
     private void SelectRCM(ActionEvent evt)
     {
-        /*if (comboBoxGroup.getSelectedItem().toString() == "--Select--") {
-            lblError.setText("Please select a group");
-            lblError.setVisible(true);
-        }*/
+
         if (comboBoxGroup.getSelectedItem().toString() != "--Select--"){
             LoadRCM(comboBoxGroup.getSelectedItem().toString());
         }
@@ -307,27 +296,10 @@ public class RmosMain extends ApplicationFrame{
     }
     private void SubmitTotalItems(ActionEvent evt)
     {
-       /* if(comboBoxYear.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select group.");
-        }
-        else if(comboBoxRCM.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select RCM.");
-        }
-        else if(comboBoxMonth.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select month.");
-        }
-        else if(comboBoxYear.getSelectedIndex()==0)
-        {
-            lblMessage.setText("Please select year.");
-        }
-        else {*/
-            int count = DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(), comboBoxMonth.getSelectedItem().toString(), comboBoxYear.getSelectedItem().toString());
-            lblMessage.setText("The total number of recycled items for the month " + comboBoxMonth.getSelectedItem().toString() + " is " + count);
-        //}
+        int count = DBConn.instance().GetTotalRecycledItemsByMonth(comboBoxRCM.getSelectedItem().toString(), comboBoxMonth.getSelectedItem().toString(), comboBoxYear.getSelectedItem().toString());
+        lblMessage.setText("The total number of recycled items for the month " + comboBoxMonth.getSelectedItem().toString() + " is " + count);
     }
+
     private void SubmitFrequentlyUsed(ActionEvent evt)
     {
         try {
@@ -392,6 +364,8 @@ public class RmosMain extends ApplicationFrame{
             System.out.println(e);
         }
     }
+
+
     public void BarChart_AWT(  String chartTitle,DefaultCategoryDataset dataset ) {
 
         JFreeChart barChart=null;
@@ -436,10 +410,9 @@ public class RmosMain extends ApplicationFrame{
         visualPanel.add(chartPanel);
         visualPanel.repaint();
         visualPanel.revalidate();
-
-
-
     }
+
+
     private void Refresh(ActionEvent e) throws SQLException {
         viewFormPanel.removeAll();
         new loadViewPanel();
@@ -447,13 +420,13 @@ public class RmosMain extends ApplicationFrame{
         viewFormPanel.revalidate();
     }
 
+
     public void initComponents() throws SQLException {
 
 
         JFrame frame = new JFrame();
         frame.setContentPane(rmosMain);
         rcmButtons = new ArrayList<>();
-       // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBounds(100, 100, 1200, 900);
         frame.setLocationRelativeTo(null);
 
@@ -529,10 +502,8 @@ public class RmosMain extends ApplicationFrame{
         txtGroupID.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-        //txtGroupID.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         txtGroupName.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        //txtGroupName.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Name", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
         txtGroupName.setBackground(Color.white);
         txtGroupName.setForeground(Color.black);
         txtGroupName.setBorder(BorderFactory.createCompoundBorder(
@@ -549,7 +520,6 @@ public class RmosMain extends ApplicationFrame{
         rcmId.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-       // rcmId.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ID", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         rcmCapacity.setFont(new Font("Montserrat", Font.PLAIN, 15));
         rcmCapacity.setBackground(Color.white);
@@ -557,7 +527,6 @@ public class RmosMain extends ApplicationFrame{
         rcmCapacity.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-        //rcmCapacity.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Capacity", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         money.setFont(new Font("Montserrat", Font.PLAIN, 15));
         money.setBackground(Color.white);
@@ -565,7 +534,6 @@ public class RmosMain extends ApplicationFrame{
         money.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-        //money.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Money", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
 
         rcmLocation.setFont(new Font("Montserrat", Font.PLAIN, 15));
@@ -574,7 +542,6 @@ public class RmosMain extends ApplicationFrame{
         rcmLocation.setBorder(BorderFactory.createCompoundBorder(
                 new CustomBorder(),
                 new EmptyBorder(new Insets(15, 25, 15, 25))));
-       //rcmLocation.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Location", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
 
         comboBoxGroup.setFont(new Font("Montserrat", Font.PLAIN, 15));
         comboBoxGroup.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Group", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Montserrat", Font.PLAIN, 15), Color.black));
@@ -725,9 +692,7 @@ public class RmosMain extends ApplicationFrame{
         tableWeightValue.getTableHeader().setReorderingAllowed(false);
         tableWeightValue.getTableHeader();
         tableWeightValue.getTableHeader().setFont(new Font("Montserrat", Font.BOLD, 20));
-        //((DefaultTableCellRenderer)tableRCM.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(JLabel.CENTER);
         tableWeightValue.setFont(new Font("Montserrat", Font.PLAIN, 15));
-        //tableRCM.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         tableWeightValue.getColumnModel().getColumn(0);
         tableWeightValue.getColumnModel().getColumn(1);
 
@@ -785,8 +750,6 @@ public class RmosMain extends ApplicationFrame{
 
         frame.setVisible(true);
     }
-
-
 }
 
 

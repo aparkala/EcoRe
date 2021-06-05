@@ -132,7 +132,13 @@ public class viewRCM extends FocusAdapter{
         emptyButton.setBounds(420, 365, 350, 90);
 
         activateDeactivateButton.addActionListener(evt -> switchPower(evt));
-        emptyButton.addActionListener(evt -> emptyRCM(evt));
+        emptyButton.addActionListener(evt -> {
+            try {
+                emptyRCM(evt);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
         deleteButton.addActionListener(evt -> deleteRCM(evt));
         addButton.addActionListener(evt -> addItem(evt));
         modifyButton.addActionListener(evt -> modifyItem(evt));
@@ -155,7 +161,7 @@ public class viewRCM extends FocusAdapter{
     }
 
     private void loadButtons(){
-        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL"))){
             activateDeactivateButton.setText("DEACTIVATE");
         }
         else {
@@ -293,7 +299,7 @@ public class viewRCM extends FocusAdapter{
     }
 
     private void switchPower(ActionEvent e){
-        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL")) || (rcm.getStatus() == Status.valueOf("active")) || (rcm.getStatus() == Status.valueOf("full"))){
+        if ((rcm.getStatus() == Status.valueOf("ACTIVE")) || (rcm.getStatus() == Status.valueOf("FULL"))){
             rmos.deactivate(rcm);
         }
         else {
@@ -303,7 +309,7 @@ public class viewRCM extends FocusAdapter{
         loadButtons();
     }
 
-    private void emptyRCM(ActionEvent e){
+    private void emptyRCM(ActionEvent e) throws SQLException {
         rmos.empty(rcm);
         this.loadStatusTable();
         emptyButton.setVisible(false);

@@ -71,6 +71,7 @@ public class RCMMain extends FocusAdapter {
         capacityLeft=rcm.getCapacityLeft();
         //itemsList = (List<Item>) rcm.getAvailableItems().values();
 
+
         LoadRCMItems();
         LoadTransactionId();
     }
@@ -241,7 +242,14 @@ public class RCMMain extends FocusAdapter {
             insertedTableModel.addRow(new String[]{txtItem.getText(), txtWeight.getText(), String.valueOf(price)});
 
             price= metricStrategy.PutMetricPrice(price); //strategy pattern
-            rcmTransactions.add(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId).withRCMId(rcmId).withItemId(itemId).withItemPrice(price).withInsertedDate(insertedDate).withWeight(weight).withCash(1).withIsEmpty(0).withGroupId(groupID).build());
+            rcmTransactions.add(new RCMTransaction.RCMTransactionBuilder().withTransactionId(transactionId)
+                                                                            .withRCMId(rcmId).withItemId(itemId)
+                                                                            .withItemPrice(price).withInsertedDate(insertedDate)
+                                                                            .withWeight(weight)
+                                                                            .withCash(1)
+                                                                            .withIsEmpty(0)
+                                                                            .withGroupId(groupID)
+                                                                            .build());
             submitButton.setEnabled(true);
             txtItem.setText("");
             txtWeight.setText("");
@@ -281,7 +289,11 @@ public class RCMMain extends FocusAdapter {
         {
             String message = "Would you like to collect money via Cash or Coupon?";
             Object[] options = {"Coupon", "Cash"};
-            int n = JOptionPane.showOptionDialog(null, message, null, JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
+            int n = JOptionPane.showOptionDialog(null,
+                                                    message, null,
+                                                    JOptionPane.YES_NO_OPTION,
+                                                    JOptionPane.QUESTION_MESSAGE,
+                                                    null, options, null);
             if (n == JOptionPane.NO_OPTION)
             {
                 cash=1;
