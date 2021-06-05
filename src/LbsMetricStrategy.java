@@ -14,8 +14,4 @@ public class LbsMetricStrategy extends MetricStrategy{
     {
         return new String[]{"Items", "Price/lb"};
     }
-    public String[] MetricItemsTableHeader()
-    {
-        return new String[] {"Items","Weight","Price/lb"};
     }
-}

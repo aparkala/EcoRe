@@ -48,8 +48,7 @@ public class RCMMain extends FocusAdapter {
     List<Item> itemsList=new ArrayList<>();
     //private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
     //private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
-    private String[] RCMINSERTEDITEMSLBS = {"Items","Weight","Price/lb"};
-    private String[] RCMINSERTEDITEMSKGS = {"Items","Weight","Price/kg"};
+    private String[] RCMINSERTEDITEMS = {"Items","Weight","Price"};
     private JFrame frame;
     DecimalFormat df=new DecimalFormat("0.00");
     RMOS rmos;
@@ -139,7 +138,7 @@ public class RCMMain extends FocusAdapter {
         //strategy pattern
         tableRCM.setModel(new DefaultTableModel(metricStrategy.MetricTableHeader(), 0) {public boolean isCellEditable(int row, int column) { return false; }
         });
-        tableInserted.setModel(new DefaultTableModel(metricStrategy.MetricItemsTableHeader(), 0) {
+        tableInserted.setModel(new DefaultTableModel(RCMINSERTEDITEMS, 0) {
             public boolean isCellEditable(int row, int column) { return false; }
         });
         tableRCM.setRowHeight(40);

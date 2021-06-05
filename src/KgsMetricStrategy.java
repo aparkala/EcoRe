@@ -17,8 +17,5 @@ public class KgsMetricStrategy extends MetricStrategy{
     {
         return new String[]{"Items", "Price/kg"};
     }
-    public String[] MetricItemsTableHeader()
-    {
-       return new String[] {"Items","Weight","Price/kg"};
-    }
 }
+

@@ -32,7 +32,7 @@ public class MainMenu extends FocusAdapter{
     private ButtonGroup buttonGroup;
 
 
-    private MetricStrategy metricStrategy;
+    private MetricFactory metricFactory;
     private Map<String,ArrayList<String>> groupRCM=new HashMap<>();
     RMOS rmos;
 
@@ -122,7 +122,8 @@ public class MainMenu extends FocusAdapter{
         buttonGroup.add(lbsRadioButton);
         buttonGroup.add(kgsRadioButton);
         lbsRadioButton.setSelected(true);
-        metricStrategy=LbsMetricFactory.getInstance().createMetric();//factory method pattern
+
+        metricFactory = LbsMetricFactory.getInstance();//factory method pattern
 
 
         lbsRadioButton.addItemListener(new ItemListener()
@@ -133,7 +134,7 @@ public class MainMenu extends FocusAdapter{
                 if(lbsRadioButton.isSelected())
                 {
                     //Factory method pattern
-                    metricStrategy=LbsMetricFactory.getInstance().createMetric();
+                    metricFactory = LbsMetricFactory.getInstance();
                 }
             }
         });
@@ -146,7 +147,7 @@ public class MainMenu extends FocusAdapter{
                 if(kgsRadioButton.isSelected())
                 {
                     //Factory method pattern
-                    metricStrategy=KgsMetricFactory.getInstance().createMetric();
+                    metricFactory = KgsMetricFactory.getInstance();
                 }
             }
         });
@@ -216,7 +217,7 @@ public class MainMenu extends FocusAdapter{
                 groupID=group.getKey();
             }
         }
-        RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metricStrategy); //send this via class object
+        RCMMain rcmMain=new RCMMain(groupID,comboBoxRCM.getSelectedItem().toString(),metricFactory.createMetric());
     }
     private void addValues(String key, String value) {
         ArrayList tempList = null;
